@@ -21,7 +21,7 @@ This is a collection of functions typically used in R, especially in psychology.
 For any question, feel free to drop me an email : pupillo@psych.uni-frankfurt.de
 
 ### Exclude rows based on a set of criteria (or participants)
-Useful code to exclude rows in a dataset that corresponds with participants we decided to exclude. 
+Useful code to exclude rows in a dataset that corresponds to participants we decided to exclude. 
 
 ```{r exclusionSeveralCriteria, echo=TRUE}
 
