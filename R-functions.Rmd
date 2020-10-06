@@ -38,5 +38,25 @@ df<-df[!df$participants %in% partExcl, ]
 df
 
 ```
+### Count the arguments of a function
+Function that returns the number of arguments in a function
+```{r count the arguments of a function, echo=TRUE}
+# let's create a function that calculate the means between three dimenions (x, y ,z)
 
+foo<-function(x, y, z){
+  sum (x, y, z)/ length(x, y,z)
+}
+
+# now I want to assign the number of the arguments of this function to a vector. 
+# I can use "formals" to store the argumens
+
+fooArgs<-formals(foo)
+
+fooArgs
+
+# then I can extract the number of the arguments with "length"
+numfooArgs<-length(fooArgs)
+
+numfooArgs
+```
   
