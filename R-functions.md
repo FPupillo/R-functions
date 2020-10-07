@@ -3,6 +3,8 @@
         participants)](#exclude-rows-based-on-a-set-of-criteria-or-participants)
     -   [Count the arguments of a
         function](#count-the-arguments-of-a-function)
+    -   [Call a function by a character
+        string](#call-a-function-by-a-character-string)
 
 R functions
 ===========
@@ -26,16 +28,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.82828283
-    ## 2             2  0.00000000
-    ## 3             3  0.32323232
-    ## 4             4  0.76767677
-    ## 5             5  0.06060606
-    ## 6             6  0.88888889
-    ## 7             7  0.76767677
-    ## 8             8  0.76767677
-    ## 9             9  0.59595960
-    ## 10           10  0.23232323
+    ## 1             1   0.4747475
+    ## 2             2   0.6565657
+    ## 3             3   0.2525253
+    ## 4             4   0.9090909
+    ## 5             5   0.6262626
+    ## 6             6   0.2929293
+    ## 7             7   0.5959596
+    ## 8             8   0.6363636
+    ## 9             9   0.2323232
+    ## 10           10   0.9191919
 
 ``` r
 # Participants that we want to exclude
@@ -48,13 +50,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.0000000
-    ## 4             4   0.7676768
-    ## 6             6   0.8888889
-    ## 7             7   0.7676768
-    ## 8             8   0.7676768
-    ## 9             9   0.5959596
-    ## 10           10   0.2323232
+    ## 2             2   0.6565657
+    ## 4             4   0.9090909
+    ## 6             6   0.2929293
+    ## 7             7   0.5959596
+    ## 8             8   0.6363636
+    ## 9             9   0.2323232
+    ## 10           10   0.9191919
 
 ### Count the arguments of a function
 
@@ -64,7 +66,7 @@ Function that returns the number of arguments in a function
 # let's create a function that calculate the means between three dimenions (x, y ,z)
 
 foo<-function(x, y, z){
-  sum (x, y, z)/ length(x, y,z)
+  sum (x, y, z)/ length(c(x, y,z))
 }
 
 # now I want to assign the number of the arguments of this function to a vector. 
@@ -87,6 +89,44 @@ fooArgs
 # then I can extract the number of the arguments with "length"
 numfooArgs<-length(fooArgs)
 
+numfooArgs
+```
+
+    ## [1] 3
+
+### Call a function by a character string
+
+How to assign a name of a function to a character string and then call
+it later? By using “get”.
+
+``` r
+# Create a function. This one calculate the average of three dimensions
+
+foo<-function(x, y, z){
+  sum (x, y, z)/ length(c(x, y,z))
+}
+
+# Now create a carachter string with the name of the formula
+
+foostr<-"foo"
+
+foostr
+```
+
+    ## [1] "foo"
+
+``` r
+# use "get" to call the function
+
+myfunction<-get(foostr)
+
+# now we can call our function
+myfunction(3,4,5)
+```
+
+    ## [1] 4
+
+``` r
 numfooArgs
 ```
 
