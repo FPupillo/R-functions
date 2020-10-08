@@ -84,3 +84,47 @@ myfunction(3,4,5)
 
 numfooArgs
 ```
+
+### Select files that meet a criterion
+Selecting files that meets a criterion, or file estention
+```{r select files, echo=TRUE}
+# create a vector with names that vary in different ways
+files<-vector()
+
+for (i in 1:10){
+  # the first five are .csv, the others are .pdf
+  if (i<6){
+  files[i]<- paste("myfile", i, ".csv", sep="")
+  } else{
+  files[i]<- paste("myfile", i, ".pdf", sep="")
+}
+}
+
+# plus some random files
+files[11:13]<-c("random1.pdf", "test2.csv", "dunno.rnd")
+
+# create the files in a subfolder
+# dir.create("testsel")
+
+ setwd("testsel")
+
+# create files
+for (f in 1:length(files)){
+  write(0, file = files[f])
+}
+
+
+
+# select all the files that are .csv
+selCsv<-list.files( pattern= ".csv$")
+selCsv
+
+# now, select files that are .csv OR that start with "myfile"
+selCsv<-list.files(pattern= c("myfile", ".csv$"))
+selCsv
+
+# now, select files that are .csv AND that start with "myfile"
+selCsv<-list.files(pattern= c("myfile.*.csv$"))
+selCsv
+
+```
