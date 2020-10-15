@@ -128,3 +128,23 @@ selCsv<-list.files(pattern= c("myfile.*.csv$"))
 selCsv
 
 ```
+
+### Get the script's directory path
+Get the path to directory that contains the script and set it as the working directory 
+```{r script directory, echo=TRUE}
+
+# get the script directory
+path<-rstudioapi::getSourceEditorContext()$path
+
+# split the string into the names of the folders
+names<-unlist(strsplit(path, split="/"))
+
+# get number of carachters last name (file name)
+charfile<-nchar(tail(names,1))
+
+# subtract that to the path
+path<-substr(path, 1,nchar(path) - charfile)
+
+# set wd 
+setwd(path)
+```
