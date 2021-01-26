@@ -114,7 +114,7 @@ for (f in 1:length(files)){
 }
 
 
-
+    
 # select all the files that are .csv
 selCsv<-list.files( pattern= ".csv$")
 selCsv
@@ -128,7 +128,21 @@ selCsv<-list.files(pattern= c("myfile.*.csv$"))
 selCsv
 
 ```
+### Select characters that come before a symbol
+Return the characters before a specific symbol
+```{r symbol, echo=TRUE}
 
+# take the first file from the previous example
+setwd("testsel")
+files<-list.files( pattern= ".csv$")
+name<-files[1]
+
+name
+# Select the characters before the ".pdf"
+sel<-sub("\\.pdf.*", "", name)
+
+sel
+```
 ### Get the script's directory path
 Get the path to directory that contains the script and set it as the working directory 
 ```{r script directory, echo=TRUE}
