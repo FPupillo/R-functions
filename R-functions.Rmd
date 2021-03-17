@@ -86,7 +86,7 @@ numfooArgs
 ```
 
 ### Select files that meet a criterion
-Selecting files that meets a criterion, or file estention
+Selecting files that meets a criterion, or file estension
 ```{r select files, echo=TRUE}
 # create a vector with names that vary in different ways
 files<-vector()
