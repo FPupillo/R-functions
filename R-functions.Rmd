@@ -59,7 +59,7 @@ numfooArgs<-length(fooArgs)
 
 numfooArgs
 ```
-  
+
 ### Call a function by a character string
 How to assign a name of a function to a character string and then call it later? By using "get".
 ```{r call a function by a character string, echo=TRUE}
@@ -94,10 +94,10 @@ files<-vector()
 for (i in 1:10){
   # the first five are .csv, the others are .pdf
   if (i<6){
-  files[i]<- paste("myfile", i, ".csv", sep="")
+    files[i]<- paste("myfile", i, ".csv", sep="")
   } else{
-  files[i]<- paste("myfile", i, ".pdf", sep="")
-}
+    files[i]<- paste("myfile", i, ".pdf", sep="")
+  }
 }
 
 # plus some random files
@@ -106,7 +106,7 @@ files[11:13]<-c("random1.pdf", "test2.csv", "dunno.rnd")
 # create the files in a subfolder
 # dir.create("testsel")
 
- setwd("testsel")
+setwd("testsel")
 
 # create files
 for (f in 1:length(files)){
@@ -114,7 +114,7 @@ for (f in 1:length(files)){
 }
 
 
-    
+
 # select all the files that are .csv
 selCsv<-list.files( pattern= ".csv$")
 selCsv
@@ -161,4 +161,66 @@ path<-substr(path, 1,nchar(path) - charfile)
 
 # set wd 
 setwd(path)
+```
+
+
+### Go through a list of items and select the ones that meet some criteria (contains rm in a loop)
+This example is based on the BOSS dataset
+``` {r select items}
+# we need the readxl package to read the excel file with the object info
+library(readxl)
+# and dplyr for intabulating
+library(dplyr)
+
+# retrieve the file with info of the categories
+category<-read_excel("SI1.xlsx", sheet = "Sheet2")
+
+# change fourth and fifth names to include an underscore
+names(category)[4:5]<-c("modal_categ", "cat_agreement")
+
+# get the number of objects per category
+table<-category %>% 
+  group_by(modal_categ) %>% 
+  tally()
+
+# order by modal categ and name agreement
+table<-table[order(table$n, decreasing=T),]
+
+# show the first 11
+head(table, n=11)
+
+# select the categories
+selCat<-c( "Outdoor activity & sport item", "Kitchen & utensil","Electronic device & accessory", "Hand labour tool & accessory")
+
+# create a dataset with only the categories
+dataSel<-category[category$modal_categ %in% selCat, ]
+
+# select the the first 40 images with the highest category agreement level for each category, 
+# assign them to the relative dataset
+for (cat in 1:length(selCat)){
+  # subset the database
+  dataim<- dataSel[dataSel$modal_categ==selCat[cat],]
+  # order it
+  dataim<-dataim[order(dataim$cat_agreement, decreasing = T),]
+  # select first 40 
+  datapractsel<-dataim[1:40,]
+  # assign to a dataset
+  assign(paste(selCat[cat],"_dat",sep=""), datapractsel)
+  
+}
+
+# merget the datasets 
+tomerge<-ls(pattern = "*_dat")
+dataim_all<-as.data.frame(NULL)
+
+for (n in tomerge){
+  dataim_all<-rbind(dataim_all, get(n) )
+}
+
+# delete the previously created single datasets
+for (i in 1:length(tomerge)){
+  name<-tomerge[i]
+  rm(list=tomerge[i])
+}
+
 ```
