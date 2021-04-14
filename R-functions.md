@@ -5,15 +5,18 @@
         function](#count-the-arguments-of-a-function)
     -   [Call a function by a character
         string](#call-a-function-by-a-character-string)
-    -   [Select files that meet a
-        criterion](#select-files-that-meet-a-criterion)
-    -   [Select characters that come before a
-        symbol](#select-characters-that-come-before-a-symbol)
-    -   [Get the script’s directory
-        path](#get-the-scripts-directory-path)
     -   [Go through a list of items and select the ones that meet some
         criteria (contains rm in a
         loop)](#go-through-a-list-of-items-and-select-the-ones-that-meet-some-criteria-contains-rm-in-a-loop)
+    -   [System Administration Tasks](#system-administration-tasks)
+        -   [Creating, deleting, copying files and
+            directories](#creating-deleting-copying-files-and-directories)
+        -   [Get the script’s directory
+            path](#get-the-scripts-directory-path)
+        -   [Select characters that come before a
+            symbol](#select-characters-that-come-before-a-symbol)
+        -   [Select files that meet a
+            criterion](#select-files-that-meet-a-criterion)
 
 R functions
 ===========
@@ -37,16 +40,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   0.7474747
-    ## 2             2   0.7676768
-    ## 3             3   0.1919192
-    ## 4             4   0.4444444
-    ## 5             5   0.1919192
-    ## 6             6   0.6565657
-    ## 7             7   0.6767677
-    ## 8             8   0.5858586
-    ## 9             9   0.2121212
-    ## 10           10   0.6161616
+    ## 1             1  0.49494949
+    ## 2             2  0.83838384
+    ## 3             3  0.13131313
+    ## 4             4  0.60606061
+    ## 5             5  0.81818182
+    ## 6             6  0.40404040
+    ## 7             7  0.54545455
+    ## 8             8  0.07070707
+    ## 9             9  0.28282828
+    ## 10           10  0.32323232
 
 ``` r
 # Participants that we want to exclude
@@ -59,13 +62,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.7676768
-    ## 4             4   0.4444444
-    ## 6             6   0.6565657
-    ## 7             7   0.6767677
-    ## 8             8   0.5858586
-    ## 9             9   0.2121212
-    ## 10           10   0.6161616
+    ## 2             2  0.83838384
+    ## 4             4  0.60606061
+    ## 6             6  0.40404040
+    ## 7             7  0.54545455
+    ## 8             8  0.07070707
+    ## 9             9  0.28282828
+    ## 10           10  0.32323232
 
 ### Count the arguments of a function
 
@@ -140,109 +143,6 @@ numfooArgs
 ```
 
     ## [1] 3
-
-### Select files that meet a criterion
-
-Selecting files that meets a criterion, or file estension
-
-``` r
-# create a vector with names that vary in different ways
-files<-vector()
-
-for (i in 1:10){
-  # the first five are .csv, the others are .pdf
-  if (i<6){
-    files[i]<- paste("myfile", i, ".csv", sep="")
-  } else{
-    files[i]<- paste("myfile", i, ".pdf", sep="")
-  }
-}
-
-# plus some random files
-files[11:13]<-c("random1.pdf", "test2.csv", "dunno.rnd")
-
-# create the files in a subfolder
-# dir.create("testsel")
-
-setwd("testsel")
-
-# create files
-for (f in 1:length(files)){
-  write(0, file = files[f])
-}
-
-
-
-# select all the files that are .csv
-selCsv<-list.files( pattern= ".csv$")
-selCsv
-```
-
-    ## [1] "myfile1.csv" "myfile2.csv" "myfile3.csv" "myfile4.csv" "myfile5.csv"
-    ## [6] "test2.csv"
-
-``` r
-# now, select files that are .csv OR that start with "myfile"
-selCsv<-list.files(pattern= c("myfile", ".csv$"))
-selCsv
-```
-
-    ##  [1] "myfile1.csv"  "myfile10.pdf" "myfile2.csv"  "myfile3.csv"  "myfile4.csv" 
-    ##  [6] "myfile5.csv"  "myfile6.pdf"  "myfile7.pdf"  "myfile8.pdf"  "myfile9.pdf"
-
-``` r
-# now, select files that are .csv AND that start with "myfile"
-selCsv<-list.files(pattern= c("myfile.*.csv$"))
-selCsv
-```
-
-    ## [1] "myfile1.csv" "myfile2.csv" "myfile3.csv" "myfile4.csv" "myfile5.csv"
-
-### Select characters that come before a symbol
-
-Return the characters before a specific symbol
-
-``` r
-# take the first file from the previous example
-setwd("testsel")
-files<-list.files( pattern= ".csv$")
-name<-files[1]
-
-name
-```
-
-    ## [1] "myfile1.csv"
-
-``` r
-# Select the characters before the ".pdf"
-sel<-sub("\\.pdf.*", "", name)
-
-sel
-```
-
-    ## [1] "myfile1.csv"
-
-### Get the script’s directory path
-
-Get the path to directory that contains the script and set it as the
-working directory
-
-``` r
-# get the script directory
-path<-rstudioapi::getSourceEditorContext()$path
-
-# split the string into the names of the folders
-names<-unlist(strsplit(path, split="/"))
-
-# get number of carachters last name (file name)
-charfile<-nchar(tail(names,1))
-
-# subtract that to the path
-path<-substr(path, 1,nchar(path) - charfile)
-
-# set wd 
-setwd(path)
-```
 
 ### Go through a list of items and select the ones that meet some criteria (contains rm in a loop)
 
@@ -335,3 +235,148 @@ for (i in 1:length(tomerge)){
   rm(list=tomerge[i])
 }
 ```
+
+### System Administration Tasks
+
+#### Creating, deleting, copying files and directories
+
+``` r
+# create a directory
+dir.create("new_folder")
+
+# create a file
+file.create("new_text_file.txt")
+file.create("new_word_file.docx")
+file.create("new_csv_file.csv")
+
+# create lots of files
+sapply(paste0("file", 1:100, ".txt"), file.create)
+
+# copy files
+file.copy("source_file.txt", "destination_folder")
+
+
+# list all CSV files non-recursively
+list.files(pattern = ".csv")
+
+# list all CSV files recursively through each sub-folder
+list.files(pattern = ".csv", recursive = TRUE)
+
+# read in all the CSV files
+all_data_frames <- lapply(list.files(pattern = ".csv"), read.csv)
+ 
+# stack all data frames together
+single_data_frame <- Reduce(rbind, all_data_frames)
+
+# remove files
+file.remove("new_text_file.txt")
+
+# check if a file exists
+file.exists("new_text_file.txt")
+
+# check if a folder exists
+file.exists("new_folder")
+```
+
+#### Get the script’s directory path
+
+Get the path to directory that contains the script and set it as the
+working directory
+
+``` r
+# get the script directory
+path<-rstudioapi::getSourceEditorContext()$path
+
+# split the string into the names of the folders
+names<-unlist(strsplit(path, split="/"))
+
+# get number of carachters last name (file name)
+charfile<-nchar(tail(names,1))
+
+# subtract that to the path
+path<-substr(path, 1,nchar(path) - charfile)
+
+# set wd 
+setwd(path)
+```
+
+#### Select characters that come before a symbol
+
+Return the characters before a specific symbol
+
+``` r
+# take the first file from the previous example
+setwd("testsel")
+files<-list.files( pattern= ".csv$")
+name<-files[1]
+
+name
+```
+
+    ## [1] "myfile1.csv"
+
+``` r
+# Select the characters before the ".pdf"
+sel<-sub("\\.pdf.*", "", name)
+
+sel
+```
+
+    ## [1] "myfile1.csv"
+
+#### Select files that meet a criterion
+
+Selecting files that meets a criterion, or file estension
+
+``` r
+# create a vector with names that vary in different ways
+files<-vector()
+
+for (i in 1:10){
+  # the first five are .csv, the others are .pdf
+  if (i<6){
+    files[i]<- paste("myfile", i, ".csv", sep="")
+  } else{
+    files[i]<- paste("myfile", i, ".pdf", sep="")
+  }
+}
+
+# plus some random files
+files[11:13]<-c("random1.pdf", "test2.csv", "dunno.rnd")
+
+# create the files in a subfolder
+# dir.create("testsel")
+
+setwd("testsel")
+
+# create files
+for (f in 1:length(files)){
+  write(0, file = files[f])
+}
+
+
+
+# select all the files that are .csv
+selCsv<-list.files( pattern= ".csv$")
+selCsv
+```
+
+    ## [1] "myfile1.csv" "myfile2.csv" "myfile3.csv" "myfile4.csv" "myfile5.csv"
+    ## [6] "test2.csv"
+
+``` r
+# now, select files that are .csv OR that start with "myfile"
+selCsv<-list.files(pattern= c("myfile", ".csv$"))
+selCsv
+```
+
+    ##  [1] "myfile1.csv"  "myfile10.pdf" "myfile2.csv"  "myfile3.csv"  "myfile4.csv" 
+    ##  [6] "myfile5.csv"  "myfile6.pdf"  "myfile7.pdf"  "myfile8.pdf"  "myfile9.pdf"
+
+``` r
+# now, select files that are .csv AND that start with "myfile"
+selCsv<-list.files(pattern= c("myfile.*.csv$"))
+selCsv
+```
+
+    ## [1] "myfile1.csv" "myfile2.csv" "myfile3.csv" "myfile4.csv" "myfile5.csv"
