@@ -8,13 +8,15 @@
     -   [Go through a list of items and select the ones that meet some
         criteria (contains rm in a
         loop)](#go-through-a-list-of-items-and-select-the-ones-that-meet-some-criteria-contains-rm-in-a-loop)
+    -   [Select elements in a vector that starts with a
+        letter](#select-elements-in-a-vector-that-starts-with-a-letter)
     -   [System Administration Tasks](#system-administration-tasks)
         -   [Creating, deleting, copying files and
             directories](#creating-deleting-copying-files-and-directories)
         -   [Get the script’s directory
             path](#get-the-scripts-directory-path)
-        -   [Select characters that come before a
-            symbol](#select-characters-that-come-before-a-symbol)
+        -   [Select files according to characters that come before a
+            symbol](#select-files-according-to-characters-that-come-before-a-symbol)
         -   [Select files that meet a
             criterion](#select-files-that-meet-a-criterion)
 
@@ -40,16 +42,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   0.1010101
-    ## 2             2   0.8585859
-    ## 3             3   0.5252525
-    ## 4             4   0.3131313
-    ## 5             5   0.2222222
-    ## 6             6   0.3232323
-    ## 7             7   0.1919192
-    ## 8             8   0.4444444
-    ## 9             9   0.7676768
-    ## 10           10   0.0000000
+    ## 1             1  0.50505051
+    ## 2             2  0.22222222
+    ## 3             3  0.89898990
+    ## 4             4  0.14141414
+    ## 5             5  0.64646465
+    ## 6             6  0.79797980
+    ## 7             7  0.37373737
+    ## 8             8  0.03030303
+    ## 9             9  0.66666667
+    ## 10           10  0.52525253
 
 ``` r
 # Participants that we want to exclude
@@ -62,13 +64,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.8585859
-    ## 4             4   0.3131313
-    ## 6             6   0.3232323
-    ## 7             7   0.1919192
-    ## 8             8   0.4444444
-    ## 9             9   0.7676768
-    ## 10           10   0.0000000
+    ## 2             2  0.22222222
+    ## 4             4  0.14141414
+    ## 6             6  0.79797980
+    ## 7             7  0.37373737
+    ## 8             8  0.03030303
+    ## 9             9  0.66666667
+    ## 10           10  0.52525253
 
 ### Count the arguments of a function
 
@@ -236,6 +238,20 @@ for (i in 1:length(tomerge)){
 }
 ```
 
+### Select elements in a vector that starts with a letter
+
+``` r
+# create a vector
+vect<-c("One", "Two", "Three", "Four", "Five")
+
+# select only the elements that start with the letter "T"
+Tvect<-vect[grep("T", vect)]
+
+Tvect
+```
+
+    ## [1] "Two"   "Three"
+
 ### System Administration Tasks
 
 #### Creating, deleting, copying files and directories
@@ -300,7 +316,7 @@ path<-substr(path, 1,nchar(path) - charfile)
 setwd(path)
 ```
 
-#### Select characters that come before a symbol
+#### Select files according to characters that come before a symbol
 
 Return the characters before a specific symbol
 
