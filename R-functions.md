@@ -8,8 +8,8 @@
     -   [Go through a list of items and select the ones that meet some
         criteria (contains rm in a
         loop)](#go-through-a-list-of-items-and-select-the-ones-that-meet-some-criteria-contains-rm-in-a-loop)
-    -   [Select elements in a vector that starts with a
-        letter](#select-elements-in-a-vector-that-starts-with-a-letter)
+    -   [Select elements in a vector that start with a
+        letter](#select-elements-in-a-vector-that-start-with-a-letter)
     -   [System Administration Tasks](#system-administration-tasks)
         -   [Creating, deleting, copying files and
             directories](#creating-deleting-copying-files-and-directories)
@@ -42,16 +42,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.50505051
-    ## 2             2  0.22222222
-    ## 3             3  0.89898990
-    ## 4             4  0.14141414
-    ## 5             5  0.64646465
-    ## 6             6  0.79797980
-    ## 7             7  0.37373737
-    ## 8             8  0.03030303
-    ## 9             9  0.66666667
-    ## 10           10  0.52525253
+    ## 1             1   0.9797980
+    ## 2             2   0.5151515
+    ## 3             3   0.3535354
+    ## 4             4   0.4848485
+    ## 5             5   0.9797980
+    ## 6             6   0.2424242
+    ## 7             7   0.8686869
+    ## 8             8   0.2121212
+    ## 9             9   0.3131313
+    ## 10           10   0.9494949
 
 ``` r
 # Participants that we want to exclude
@@ -64,13 +64,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.22222222
-    ## 4             4  0.14141414
-    ## 6             6  0.79797980
-    ## 7             7  0.37373737
-    ## 8             8  0.03030303
-    ## 9             9  0.66666667
-    ## 10           10  0.52525253
+    ## 2             2   0.5151515
+    ## 4             4   0.4848485
+    ## 6             6   0.2424242
+    ## 7             7   0.8686869
+    ## 8             8   0.2121212
+    ## 9             9   0.3131313
+    ## 10           10   0.9494949
 
 ### Count the arguments of a function
 
@@ -238,7 +238,7 @@ for (i in 1:length(tomerge)){
 }
 ```
 
-### Select elements in a vector that starts with a letter
+### Select elements in a vector that start with a letter
 
 ``` r
 # create a vector
