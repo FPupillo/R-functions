@@ -148,6 +148,18 @@ for (i in 1:length(tomerge)){
 }
 
 ```
+### Select elements in a vector that starts with a letter
+```{r}
+
+# create a vector
+vect<-c("One", "Two", "Three", "Four", "Five")
+
+# select only the elements that start with the letter "T"
+Tvect<-vect[grep("T", vect)]
+
+Tvect
+
+```
 ### System Administration Tasks
 
 #### Creating, deleting, copying files and directories
@@ -209,7 +221,7 @@ path<-substr(path, 1,nchar(path) - charfile)
 setwd(path)
 ```
 
-#### Select characters that come before a symbol
+#### Select files according to characters that come before a symbol
 Return the characters before a specific symbol
 ```{r symbol, echo=TRUE}
 
