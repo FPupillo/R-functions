@@ -148,6 +148,20 @@ for (i in 1:length(tomerge)){
 }
 
 ```
+### Calculate means with grouing factor with dplyr
+```{r}
+library(dplyr)
+meanGroup<- category %>%
+  group_by(modal_categ) %>%
+  slice( (1:10)) %>% # take only the first 10
+    summarise(meanCateg = mean(cat_agreement),
+            Dataset = unique(Dataset)) # keep the other variable
+  
+meanGroup
+
+
+```
+
 ### Select elements in a vector that start with a letter
 ```{r}
 
