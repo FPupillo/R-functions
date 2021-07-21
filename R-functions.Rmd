@@ -148,15 +148,15 @@ for (i in 1:length(tomerge)){
 }
 
 ```
-### Calculate means with grouing factor with dplyr
+### Calculate means with grouping factor with dplyr
 ```{r}
 library(dplyr)
 meanGroup<- category %>%
   group_by(modal_categ) %>%
   slice( (1:10)) %>% # take only the first 10
-    summarise(meanCateg = mean(cat_agreement),
+  summarise(meanCateg = mean(cat_agreement),
             Dataset = unique(Dataset)) # keep the other variable
-  
+
 meanGroup
 
 
@@ -174,6 +174,88 @@ Tvect<-vect[grep("T", vect)]
 Tvect
 
 ```
+### Looping
+Functions that are used for looping through data
+#### create a progress bar
+```{r progress bar}
+
+# using the previous example of the boss dataset
+
+# make a progress bar
+pb<-txtProgressBar(min=0, max=length(selCat), style =3)
+
+for (cat in 1:length(selCat)){
+  # subset the database
+  dataim<- dataSel[dataSel$modal_categ==selCat[cat],]
+  # order it
+  dataim<-dataim[order(dataim$cat_agreement, decreasing = T),]
+  # select first 40 
+  datapractsel<-dataim[1:40,]
+  # assign to a dataset
+  assign(paste(selCat[cat],"_dat",sep=""), datapractsel)
+  
+  #progress bar
+  setTxtProgressBar(pb, i) 
+}
+
+```
+
+#### Error Handling
+Don't stop the loop when there is an error, but catch the error
+```{r error handling}
+# create a variable with random numbers, but with a NA
+randVar<-c(1,2,3,4,NA, 6,7)
+
+# loop through it, checking whether it is bigger than 5
+for (num in randVar){
+  if (num>5){
+    print(paste(num, "is bigger than five"))
+  } else {
+    print(paste(num, "is smaller than five"))
+  }
+}
+
+# create a variable to store missing cases
+missing_cases<-vector()
+
+# and a counter to store them
+miss_count<-1
+# as you can see, it stops when there is a NA
+# let's use 'tryCatch'
+for (num in randVar){
+  tryCatch({
+    
+    if (num>5){
+      print(paste(num, "is bigger than five"))
+    } else {
+      print(paste(num, "is smaller than five"))
+    }
+  },
+  
+  # we want to cathc the error and print something informative,
+  # like at which number it crashed
+  error= function(e) {print(paste("problem with number", num))
+    
+    print(paste(num, "is not a number"))
+    
+    # we could also do something for this case
+    # we could assign to a list of missing cases, so we can count them
+    missing_cases[miss_count]<<-num
+    # we need the superassignment operator "<<-" to assign this to the 
+    # global environment
+    
+    # update the counter
+    miss_count<<-miss_count+1
+  }
+  )
+}
+
+# how many missing cases?
+length(missing_cases)
+
+```
+
+
 ### System Administration Tasks
 
 #### Creating, deleting, copying files and directories
@@ -182,16 +264,22 @@ Tvect
 dir.create("new_folder")
 
 # create a file
-file.create("new_text_file.txt")
-file.create("new_word_file.docx")
-file.create("new_csv_file.csv")
+# file.create("new_text_file.txt")
+# file.create("new_word_file.docx")
+# file.create("new_csv_file.csv")
+
+# assign a matrix to those files
+fileSample<-matrix(data =0, nrow = 2, ncol = 2)
+write.table(fileSample,"new_text_file.txt", row.names = F )
+write.table(fileSample,"new_text_file.docx", row.names = F )
+write.csv(fileSample,"new_csv_file.csv", row.names = F )
+
 
 # create lots of files
-sapply(paste0("file", 1:100, ".txt"), file.create)
+sapply(paste0("new_folder/file", 1:100, ".txt"), file.create)
 
 # copy files
 file.copy("source_file.txt", "destination_folder")
-
 
 # list all CSV files non-recursively
 list.files(pattern = ".csv")
@@ -201,7 +289,7 @@ list.files(pattern = ".csv", recursive = TRUE)
 
 # read in all the CSV files
 all_data_frames <- lapply(list.files(pattern = ".csv"), read.csv)
- 
+
 # stack all data frames together
 single_data_frame <- Reduce(rbind, all_data_frames)
 
