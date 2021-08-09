@@ -155,7 +155,7 @@ for (i in 1:length(tomerge)){
              grep( "^rh_", names(data), value = TRUE))]
 
 # select items that ends with "thickness"
-datasub<-data[, c(grep("$_thickness", names(data), value = TRUE))]
+datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 
 ```
 

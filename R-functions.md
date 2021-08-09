@@ -47,16 +47,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   1.0000000
-    ## 2             2   0.3434343
-    ## 3             3   0.6161616
-    ## 4             4   0.8484848
-    ## 5             5   0.1010101
-    ## 6             6   0.3636364
-    ## 7             7   0.8181818
-    ## 8             8   0.9292929
-    ## 9             9   0.7676768
-    ## 10           10   1.0000000
+    ## 1             1  0.33333333
+    ## 2             2  0.96969697
+    ## 3             3  0.22222222
+    ## 4             4  0.78787879
+    ## 5             5  0.68686869
+    ## 6             6  0.78787879
+    ## 7             7  0.13131313
+    ## 8             8  0.01010101
+    ## 9             9  0.42424242
+    ## 10           10  0.33333333
 
 ``` r
 # Participants that we want to exclude
@@ -69,13 +69,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.3434343
-    ## 4             4   0.8484848
-    ## 6             6   0.3636364
-    ## 7             7   0.8181818
-    ## 8             8   0.9292929
-    ## 9             9   0.7676768
-    ## 10           10   1.0000000
+    ## 2             2  0.96969697
+    ## 4             4  0.78787879
+    ## 6             6  0.78787879
+    ## 7             7  0.13131313
+    ## 8             8  0.01010101
+    ## 9             9  0.42424242
+    ## 10           10  0.33333333
 
 ### Count the arguments of a function
 
@@ -254,7 +254,7 @@ for (i in 1:length(tomerge)){
              grep( "^rh_", names(data), value = TRUE))]
 
 # select items that ends with "thickness"
-datasub<-data[, c(grep("$_thickness", names(data), value = TRUE))]
+datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 ```
 
 ### Calculate means with grouping factor with dplyr
