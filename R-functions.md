@@ -8,8 +8,14 @@
     -   [Go through a list of items and select the ones that meet some
         criteria (contains rm in a
         loop)](#go-through-a-list-of-items-and-select-the-ones-that-meet-some-criteria-contains-rm-in-a-loop)
+    -   [select items in a dataset that start or end with a
+        string](#select-items-in-a-dataset-that-start-or-end-with-a-string)
+    -   [Calculate means with grouping factor with
+        dplyr](#calculate-means-with-grouping-factor-with-dplyr)
     -   [Select elements in a vector that start with a
         letter](#select-elements-in-a-vector-that-start-with-a-letter)
+    -   [Looping](#looping)
+        -   [Error Handling](#error-handling)
     -   [System Administration Tasks](#system-administration-tasks)
         -   [Creating, deleting, copying files and
             directories](#creating-deleting-copying-files-and-directories)
@@ -20,14 +26,13 @@
         -   [Select files that meet a
             criterion](#select-files-that-meet-a-criterion)
 
-R functions
-===========
+# R functions
 
 This is a collection of functions typically used in R, especially in
 psychology.
 
 For any question, feel free to drop me an email :
-<a href="mailto:pupillo@psych.uni-frankfurt.de" class="email">pupillo@psych.uni-frankfurt.de</a>
+<pupillo@psych.uni-frankfurt.de>
 
 ### Exclude rows based on a set of criteria (or participants)
 
@@ -42,16 +47,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   0.9797980
-    ## 2             2   0.5151515
-    ## 3             3   0.3535354
-    ## 4             4   0.4848485
-    ## 5             5   0.9797980
-    ## 6             6   0.2424242
-    ## 7             7   0.8686869
-    ## 8             8   0.2121212
-    ## 9             9   0.3131313
-    ## 10           10   0.9494949
+    ## 1             1   1.0000000
+    ## 2             2   0.3434343
+    ## 3             3   0.6161616
+    ## 4             4   0.8484848
+    ## 5             5   0.1010101
+    ## 6             6   0.3636364
+    ## 7             7   0.8181818
+    ## 8             8   0.9292929
+    ## 9             9   0.7676768
+    ## 10           10   1.0000000
 
 ``` r
 # Participants that we want to exclude
@@ -64,13 +69,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.5151515
-    ## 4             4   0.4848485
-    ## 6             6   0.2424242
-    ## 7             7   0.8686869
-    ## 8             8   0.2121212
-    ## 9             9   0.3131313
-    ## 10           10   0.9494949
+    ## 2             2   0.3434343
+    ## 4             4   0.8484848
+    ## 6             6   0.3636364
+    ## 7             7   0.8181818
+    ## 8             8   0.9292929
+    ## 9             9   0.7676768
+    ## 10           10   1.0000000
 
 ### Count the arguments of a function
 
@@ -157,6 +162,9 @@ library(readxl)
 library(dplyr)
 ```
 
+    ## Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
+    ## when loading 'dplyr'
+
     ## 
     ## Attaching package: 'dplyr'
 
@@ -238,6 +246,50 @@ for (i in 1:length(tomerge)){
 }
 ```
 
+### select items in a dataset that start or end with a string
+
+``` r
+# select variables that start with lh or rh
+ datasub<-data[, c( grep( "^lh_", names(data), value = TRUE), 
+             grep( "^rh_", names(data), value = TRUE))]
+
+# select items that ends with "thickness"
+datasub<-data[, c(grep("$_thickness", names(data), value = TRUE))]
+```
+
+### Calculate means with grouping factor with dplyr
+
+``` r
+library(dplyr)
+meanGroup<- category %>%
+  group_by(modal_categ) %>%
+  slice( (1:10)) %>% # take only the first 10
+  summarise(meanCateg = mean(cat_agreement),
+            Dataset = unique(Dataset)) # keep the other variable
+```
+
+    ## `summarise()` regrouping output by 'modal_categ' (override with `.groups` argument)
+
+``` r
+meanGroup
+```
+
+    ## # A tibble: 48 x 3
+    ## # Groups:   modal_categ [30]
+    ##    modal_categ             meanCateg Dataset        
+    ##    <chr>                       <dbl> <chr>          
+    ##  1 Bird                        0.979 BOSS-2014 (v.2)
+    ##  2 Bodypart                    0.795 BOSS-2014 (v.2)
+    ##  3 Building infrastructure     0.669 BOSS-2014 (v.2)
+    ##  4 Building material           0.596 BOSS-2014 (v.2)
+    ##  5 Building material           0.596 BOSS-2010 (v.1)
+    ##  6 Canine                      0.806 BOSS-2014 (v.2)
+    ##  7 Clothing                    0.848 BOSS-2014 (v.2)
+    ##  8 Clothing                    0.848 BOSS-2010 (v.1)
+    ##  9 Crustacean                  0.668 BOSS-2014 (v.2)
+    ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
+    ## # … with 38 more rows
+
 ### Select elements in a vector that start with a letter
 
 ``` r
@@ -252,6 +304,94 @@ Tvect
 
     ## [1] "Two"   "Three"
 
+### Looping
+
+Functions that are used for looping through data \#\#\#\# create a
+progress bar
+
+``` r
+# using the previous example of the boss dataset
+
+# make a progress bar
+pb<-txtProgressBar(min=0, max=length(selCat), style =3)
+```
+
+    ##   |                                                                              |                                                                      |   0%
+
+``` r
+for (cat in 1:length(selCat)){
+  # subset the database
+  dataim<- dataSel[dataSel$modal_categ==selCat[cat],]
+  # order it
+  dataim<-dataim[order(dataim$cat_agreement, decreasing = T),]
+  # select first 40 
+  datapractsel<-dataim[1:40,]
+  # assign to a dataset
+  assign(paste(selCat[cat],"_dat",sep=""), datapractsel)
+  
+  #progress bar
+  setTxtProgressBar(pb, i) 
+}
+```
+
+    ##   |                                                                              |======================================================================| 100%
+
+#### Error Handling
+
+Don’t stop the loop when there is an error, but catch the error
+
+``` r
+# create a variable with random numbers, but with a NA
+randVar<-c(1,2,3,4,NA, 6,7)
+
+# loop through it, checking whether it is bigger than 5
+for (num in randVar){
+  if (num>5){
+    print(paste(num, "is bigger than five"))
+  } else {
+    print(paste(num, "is smaller than five"))
+  }
+}
+
+# create a variable to store missing cases
+missing_cases<-vector()
+
+# and a counter to store them
+miss_count<-1
+# as you can see, it stops when there is a NA
+# let's use 'tryCatch'
+for (num in randVar){
+  tryCatch({
+    
+    if (num>5){
+      print(paste(num, "is bigger than five"))
+    } else {
+      print(paste(num, "is smaller than five"))
+    }
+  },
+  
+  # we want to cathc the error and print something informative,
+  # like at which number it crashed
+  error= function(e) {print(paste("problem with number", num))
+    
+    print(paste(num, "is not a number"))
+    
+    # we could also do something for this case
+    # we could assign to a list of missing cases, so we can count them
+    missing_cases[miss_count]<<-num
+    # we need the superassignment operator "<<-" to assign this to the 
+    # global environment
+    
+    # update the counter
+    miss_count<<-miss_count+1
+  }
+  )
+}
+
+# how many missing cases?
+length(missing_cases)
+```
+
 ### System Administration Tasks
 
 #### Creating, deleting, copying files and directories
@@ -261,16 +401,22 @@ Tvect
 dir.create("new_folder")
 
 # create a file
-file.create("new_text_file.txt")
-file.create("new_word_file.docx")
-file.create("new_csv_file.csv")
+# file.create("new_text_file.txt")
+# file.create("new_word_file.docx")
+# file.create("new_csv_file.csv")
+
+# assign a matrix to those files
+fileSample<-matrix(data =0, nrow = 2, ncol = 2)
+write.table(fileSample,"new_text_file.txt", row.names = F )
+write.table(fileSample,"new_text_file.docx", row.names = F )
+write.csv(fileSample,"new_csv_file.csv", row.names = F )
+
 
 # create lots of files
-sapply(paste0("file", 1:100, ".txt"), file.create)
+sapply(paste0("new_folder/file", 1:100, ".txt"), file.create)
 
 # copy files
 file.copy("source_file.txt", "destination_folder")
-
 
 # list all CSV files non-recursively
 list.files(pattern = ".csv")
@@ -280,7 +426,7 @@ list.files(pattern = ".csv", recursive = TRUE)
 
 # read in all the CSV files
 all_data_frames <- lapply(list.files(pattern = ".csv"), read.csv)
- 
+
 # stack all data frames together
 single_data_frame <- Reduce(rbind, all_data_frames)
 

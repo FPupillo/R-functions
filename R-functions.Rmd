@@ -148,6 +148,17 @@ for (i in 1:length(tomerge)){
 }
 
 ```
+### select items in a dataset that start or end with a string
+```{R, eval = F}
+# select variables that start with lh or rh
+ datasub<-data[, c( grep( "^lh_", names(data), value = TRUE), 
+             grep( "^rh_", names(data), value = TRUE))]
+
+# select items that ends with "thickness"
+datasub<-data[, c(grep("$_thickness", names(data), value = TRUE))]
+
+```
+
 ### Calculate means with grouping factor with dplyr
 ```{r}
 library(dplyr)
@@ -202,7 +213,7 @@ for (cat in 1:length(selCat)){
 
 #### Error Handling
 Don't stop the loop when there is an error, but catch the error
-```{r error handling}
+```{r error handling, eval=F}
 # create a variable with random numbers, but with a NA
 randVar<-c(1,2,3,4,NA, 6,7)
 
