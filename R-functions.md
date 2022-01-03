@@ -12,8 +12,8 @@
         string](#select-items-in-a-dataset-that-start-or-end-with-a-string)
     -   [Calculate means with grouping factor with
         dplyr](#calculate-means-with-grouping-factor-with-dplyr)
-    -   [Select elements in a vector that start with a
-        letter](#select-elements-in-a-vector-that-start-with-a-letter)
+    -   [Select elements in a vector that start or end with a
+        letter](#select-elements-in-a-vector-that-start-or-end-with-a-letter)
     -   [Looping](#looping)
         -   [Error Handling](#error-handling)
     -   [System Administration Tasks](#system-administration-tasks)
@@ -47,16 +47,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.33333333
-    ## 2             2  0.96969697
-    ## 3             3  0.22222222
-    ## 4             4  0.78787879
-    ## 5             5  0.68686869
-    ## 6             6  0.78787879
-    ## 7             7  0.13131313
-    ## 8             8  0.01010101
-    ## 9             9  0.42424242
-    ## 10           10  0.33333333
+    ## 1             1  0.59595960
+    ## 2             2  0.03030303
+    ## 3             3  0.33333333
+    ## 4             4  0.03030303
+    ## 5             5  0.18181818
+    ## 6             6  0.81818182
+    ## 7             7  0.94949495
+    ## 8             8  0.35353535
+    ## 9             9  0.73737374
+    ## 10           10  0.29292929
 
 ``` r
 # Participants that we want to exclude
@@ -69,13 +69,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.96969697
-    ## 4             4  0.78787879
-    ## 6             6  0.78787879
-    ## 7             7  0.13131313
-    ## 8             8  0.01010101
-    ## 9             9  0.42424242
-    ## 10           10  0.33333333
+    ## 2             2  0.03030303
+    ## 4             4  0.03030303
+    ## 6             6  0.81818182
+    ## 7             7  0.94949495
+    ## 8             8  0.35353535
+    ## 9             9  0.73737374
+    ## 10           10  0.29292929
 
 ### Count the arguments of a function
 
@@ -290,7 +290,7 @@ meanGroup
     ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
     ## # … with 38 more rows
 
-### Select elements in a vector that start with a letter
+### Select elements in a vector that start or end with a letter
 
 ``` r
 # create a vector
@@ -303,6 +303,15 @@ Tvect
 ```
 
     ## [1] "Two"   "Three"
+
+``` r
+# select only the elements that end with the letter "e"
+Evect<-vect[grep("e$", vect)]
+
+Evect
+```
+
+    ## [1] "One"   "Three" "Five"
 
 ### Looping
 

@@ -173,7 +173,7 @@ meanGroup
 
 ```
 
-### Select elements in a vector that start with a letter
+### Select elements in a vector that start or end with a letter
 ```{r}
 
 # create a vector
@@ -184,6 +184,10 @@ Tvect<-vect[grep("T", vect)]
 
 Tvect
 
+# select only the elements that end with the letter "e"
+Evect<-vect[grep("e$", vect)]
+
+Evect
 ```
 ### Looping
 Functions that are used for looping through data
