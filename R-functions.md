@@ -10,12 +10,15 @@
         loop)](#go-through-a-list-of-items-and-select-the-ones-that-meet-some-criteria-contains-rm-in-a-loop)
     -   [select items in a dataset that start or end with a
         string](#select-items-in-a-dataset-that-start-or-end-with-a-string)
-    -   [Calculate means with grouping factor with
-        dplyr](#calculate-means-with-grouping-factor-with-dplyr)
     -   [Select elements in a vector that start or end with a
         letter](#select-elements-in-a-vector-that-start-or-end-with-a-letter)
     -   [Looping](#looping)
         -   [Error Handling](#error-handling)
+    -   [Dplyr](#dplyr)
+        -   [Calculate means with grouping factor with
+            dplyr](#calculate-means-with-grouping-factor-with-dplyr)
+        -   [Add trial number in a long dataset with
+            dplyr](#add-trial-number-in-a-long-dataset-with-dplyr)
     -   [System Administration Tasks](#system-administration-tasks)
         -   [Creating, deleting, copying files and
             directories](#creating-deleting-copying-files-and-directories)
@@ -47,16 +50,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.59595960
-    ## 2             2  0.03030303
-    ## 3             3  0.33333333
-    ## 4             4  0.03030303
-    ## 5             5  0.18181818
-    ## 6             6  0.81818182
-    ## 7             7  0.94949495
-    ## 8             8  0.35353535
-    ## 9             9  0.73737374
-    ## 10           10  0.29292929
+    ## 1             1  0.30303030
+    ## 2             2  0.78787879
+    ## 3             3  0.94949495
+    ## 4             4  0.34343434
+    ## 5             5  0.29292929
+    ## 6             6  0.71717172
+    ## 7             7  0.03030303
+    ## 8             8  0.83838384
+    ## 9             9  0.34343434
+    ## 10           10  0.52525253
 
 ``` r
 # Participants that we want to exclude
@@ -69,13 +72,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.03030303
-    ## 4             4  0.03030303
-    ## 6             6  0.81818182
-    ## 7             7  0.94949495
-    ## 8             8  0.35353535
-    ## 9             9  0.73737374
-    ## 10           10  0.29292929
+    ## 2             2  0.78787879
+    ## 4             4  0.34343434
+    ## 6             6  0.71717172
+    ## 7             7  0.03030303
+    ## 8             8  0.83838384
+    ## 9             9  0.34343434
+    ## 10           10  0.52525253
 
 ### Count the arguments of a function
 
@@ -162,9 +165,6 @@ library(readxl)
 library(dplyr)
 ```
 
-    ## Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
-    ## when loading 'dplyr'
-
     ## 
     ## Attaching package: 'dplyr'
 
@@ -195,7 +195,7 @@ table<-table[order(table$n, decreasing=T),]
 head(table, n=11)
 ```
 
-    ## # A tibble: 11 x 2
+    ## # A tibble: 11 × 2
     ##    modal_categ                       n
     ##    <chr>                         <int>
     ##  1 Food                            168
@@ -257,39 +257,6 @@ for (i in 1:length(tomerge)){
 datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 ```
 
-### Calculate means with grouping factor with dplyr
-
-``` r
-library(dplyr)
-meanGroup<- category %>%
-  group_by(modal_categ) %>%
-  slice( (1:10)) %>% # take only the first 10
-  summarise(meanCateg = mean(cat_agreement),
-            Dataset = unique(Dataset)) # keep the other variable
-```
-
-    ## `summarise()` regrouping output by 'modal_categ' (override with `.groups` argument)
-
-``` r
-meanGroup
-```
-
-    ## # A tibble: 48 x 3
-    ## # Groups:   modal_categ [30]
-    ##    modal_categ             meanCateg Dataset        
-    ##    <chr>                       <dbl> <chr>          
-    ##  1 Bird                        0.979 BOSS-2014 (v.2)
-    ##  2 Bodypart                    0.795 BOSS-2014 (v.2)
-    ##  3 Building infrastructure     0.669 BOSS-2014 (v.2)
-    ##  4 Building material           0.596 BOSS-2014 (v.2)
-    ##  5 Building material           0.596 BOSS-2010 (v.1)
-    ##  6 Canine                      0.806 BOSS-2014 (v.2)
-    ##  7 Clothing                    0.848 BOSS-2014 (v.2)
-    ##  8 Clothing                    0.848 BOSS-2010 (v.1)
-    ##  9 Crustacean                  0.668 BOSS-2014 (v.2)
-    ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
-    ## # … with 38 more rows
-
 ### Select elements in a vector that start or end with a letter
 
 ``` r
@@ -315,8 +282,8 @@ Evect
 
 ### Looping
 
-Functions that are used for looping through data \#\#\#\# create a
-progress bar
+Functions that are used for looping through data \#### create a progress
+bar
 
 ``` r
 # using the previous example of the boss dataset
@@ -399,6 +366,56 @@ for (num in randVar){
 
 # how many missing cases?
 length(missing_cases)
+```
+
+### Dplyr
+
+#### Calculate means with grouping factor with dplyr
+
+``` r
+library(dplyr)
+meanGroup<- category %>%
+  group_by(modal_categ) %>%
+  slice( (1:10)) %>% # take only the first 10
+  summarise(meanCateg = mean(cat_agreement),
+            Dataset = unique(Dataset)) # keep the other variable
+```
+
+    ## `summarise()` has grouped output by 'modal_categ'. You can override using the
+    ## `.groups` argument.
+
+``` r
+meanGroup
+```
+
+    ## # A tibble: 48 × 3
+    ## # Groups:   modal_categ [30]
+    ##    modal_categ             meanCateg Dataset        
+    ##    <chr>                       <dbl> <chr>          
+    ##  1 Bird                        0.979 BOSS-2014 (v.2)
+    ##  2 Bodypart                    0.795 BOSS-2014 (v.2)
+    ##  3 Building infrastructure     0.669 BOSS-2014 (v.2)
+    ##  4 Building material           0.596 BOSS-2014 (v.2)
+    ##  5 Building material           0.596 BOSS-2010 (v.1)
+    ##  6 Canine                      0.806 BOSS-2014 (v.2)
+    ##  7 Clothing                    0.848 BOSS-2014 (v.2)
+    ##  8 Clothing                    0.848 BOSS-2010 (v.1)
+    ##  9 Crustacean                  0.668 BOSS-2014 (v.2)
+    ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
+    ## # … with 38 more rows
+
+#### Add trial number in a long dataset with dplyr
+
+``` r
+# create data frame 
+trial_df <- data.frame('subject' = c(rep('101', 3), rep('102', 3)),
+                  'result' = c(32, 33, 64, 12, 18, 14))
+
+# group by subject and add a row number
+# assumes your data frame is ordered by trial number for each subject
+trial_df <- trial_df %>%
+  group_by(subject) %>%
+  mutate(trial_number = row_number())
 ```
 
 ### System Administration Tasks
