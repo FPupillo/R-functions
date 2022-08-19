@@ -159,19 +159,7 @@ datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 
 ```
 
-### Calculate means with grouping factor with dplyr
-```{r}
-library(dplyr)
-meanGroup<- category %>%
-  group_by(modal_categ) %>%
-  slice( (1:10)) %>% # take only the first 10
-  summarise(meanCateg = mean(cat_agreement),
-            Dataset = unique(Dataset)) # keep the other variable
 
-meanGroup
-
-
-```
 
 ### Select elements in a vector that start or end with a letter
 ```{r}
@@ -269,6 +257,36 @@ for (num in randVar){
 length(missing_cases)
 
 ```
+
+### Dplyr
+#### Calculate means with grouping factor with dplyr
+```{r}
+library(dplyr)
+meanGroup<- category %>%
+  group_by(modal_categ) %>%
+  slice( (1:10)) %>% # take only the first 10
+  summarise(meanCateg = mean(cat_agreement),
+            Dataset = unique(Dataset)) # keep the other variable
+
+meanGroup
+
+
+```
+
+#### Add trial number in a long dataset with dplyr
+```{r}
+
+# create data frame 
+trial_df <- data.frame('subject' = c(rep('101', 3), rep('102', 3)),
+                  'result' = c(32, 33, 64, 12, 18, 14))
+
+# group by subject and add a row number
+# assumes your data frame is ordered by trial number for each subject
+trial_df <- trial_df %>%
+  group_by(subject) %>%
+  mutate(trial_number = row_number())
+```
+
 
 
 ### System Administration Tasks
