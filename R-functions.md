@@ -13,6 +13,7 @@
     -   [Select elements in a vector that start or end with a
         letter](#select-elements-in-a-vector-that-start-or-end-with-a-letter)
     -   [Looping](#looping)
+        -   [Append dataframes in a loop](#append-dataframes-in-a-loop)
         -   [Error Handling](#error-handling)
     -   [Dplyr](#dplyr)
         -   [Calculate means with grouping factor with
@@ -50,16 +51,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.30303030
-    ## 2             2  0.78787879
-    ## 3             3  0.94949495
-    ## 4             4  0.34343434
-    ## 5             5  0.29292929
-    ## 6             6  0.71717172
-    ## 7             7  0.03030303
-    ## 8             8  0.83838384
-    ## 9             9  0.34343434
-    ## 10           10  0.52525253
+    ## 1             1  0.51515152
+    ## 2             2  0.75757576
+    ## 3             3  0.02020202
+    ## 4             4  0.24242424
+    ## 5             5  0.91919192
+    ## 6             6  0.07070707
+    ## 7             7  0.43434343
+    ## 8             8  0.04040404
+    ## 9             9  0.35353535
+    ## 10           10  0.49494949
 
 ``` r
 # Participants that we want to exclude
@@ -72,13 +73,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.78787879
-    ## 4             4  0.34343434
-    ## 6             6  0.71717172
-    ## 7             7  0.03030303
-    ## 8             8  0.83838384
-    ## 9             9  0.34343434
-    ## 10           10  0.52525253
+    ## 2             2  0.75757576
+    ## 4             4  0.24242424
+    ## 6             6  0.07070707
+    ## 7             7  0.43434343
+    ## 8             8  0.04040404
+    ## 9             9  0.35353535
+    ## 10           10  0.49494949
 
 ### Count the arguments of a function
 
@@ -312,6 +313,27 @@ for (cat in 1:length(selCat)){
 
     ##   |                                                                              |======================================================================| 100%
 
+#### Append dataframes in a loop
+
+``` r
+# first, create a list
+my_list<-list()
+
+
+# loop through the dataframes
+for (dataframe in 1:length(dataframes)){
+  
+  currdataframe<-dataframes[datamframe]
+  # assign a dataframe to the list
+  my_list[[dataframe]]<-currdataframe
+  
+  
+}
+
+# merge the files outside the loop
+all_df<-do.call(rbind, my_list)
+```
+
 #### Error Handling
 
 Don’t stop the loop when there is an error, but catch the error
@@ -403,6 +425,7 @@ meanGroup
     ##  9 Crustacean                  0.668 BOSS-2014 (v.2)
     ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
     ## # … with 38 more rows
+    ## # ℹ Use `print(n = ...)` to see more rows
 
 #### Add trial number in a long dataset with dplyr
 

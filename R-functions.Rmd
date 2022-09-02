@@ -203,6 +203,29 @@ for (cat in 1:length(selCat)){
 
 ```
 
+#### Append dataframes in a loop
+```{r eval=FALSE, include=T}
+# first, create a list
+my_list<-list()
+
+
+# loop through the dataframes
+for (dataframe in 1:length(dataframes)){
+  
+  currdataframe<-dataframes[datamframe]
+  # assign a dataframe to the list
+  my_list[[dataframe]]<-currdataframe
+  
+  
+}
+
+# merge the files outside the loop
+all_df<-do.call(rbind, my_list)
+
+
+```
+
+
 #### Error Handling
 Don't stop the loop when there is an error, but catch the error
 ```{r error handling, eval=F}
