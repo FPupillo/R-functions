@@ -37,6 +37,12 @@ df<-df[!df$participants %in% partExcl, ]
 
 df
 
+# we could also use dplyr
+library(dplyr)
+
+df<- df %>%
+  filter(!participants %in% partExcl)
+
 ```
 ### Count the arguments of a function
 Function that returns the number of arguments in a function

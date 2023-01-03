@@ -51,16 +51,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.51515152
-    ## 2             2  0.75757576
-    ## 3             3  0.02020202
-    ## 4             4  0.24242424
-    ## 5             5  0.91919192
-    ## 6             6  0.07070707
-    ## 7             7  0.43434343
-    ## 8             8  0.04040404
-    ## 9             9  0.35353535
-    ## 10           10  0.49494949
+    ## 1             1  0.30303030
+    ## 2             2  0.65656566
+    ## 3             3  0.43434343
+    ## 4             4  0.34343434
+    ## 5             5  0.02020202
+    ## 6             6  0.24242424
+    ## 7             7  0.41414141
+    ## 8             8  0.06060606
+    ## 9             9  0.80808081
+    ## 10           10  0.05050505
 
 ``` r
 # Participants that we want to exclude
@@ -73,13 +73,34 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.75757576
-    ## 4             4  0.24242424
-    ## 6             6  0.07070707
-    ## 7             7  0.43434343
-    ## 8             8  0.04040404
-    ## 9             9  0.35353535
-    ## 10           10  0.49494949
+    ## 2             2  0.65656566
+    ## 4             4  0.34343434
+    ## 6             6  0.24242424
+    ## 7             7  0.41414141
+    ## 8             8  0.06060606
+    ## 9             9  0.80808081
+    ## 10           10  0.05050505
+
+``` r
+# we could also use dplyr
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+df<- df %>%
+  filter(!participants %in% partExcl)
+```
 
 ### Count the arguments of a function
 
@@ -164,20 +185,7 @@ This example is based on the BOSS dataset
 library(readxl)
 # and dplyr for intabulating
 library(dplyr)
-```
 
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 # retrieve the file with info of the categories
 category<-read_excel("SI1.xlsx", sheet = "Sheet2")
 
@@ -425,7 +433,6 @@ meanGroup
     ##  9 Crustacean                  0.668 BOSS-2014 (v.2)
     ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
     ## # … with 38 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 #### Add trial number in a long dataset with dplyr
 
