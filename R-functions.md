@@ -16,10 +16,20 @@
         -   [Append dataframes in a loop](#append-dataframes-in-a-loop)
         -   [Error Handling](#error-handling)
     -   [Dplyr](#dplyr)
+        -   [Count number of observations by
+            group](#count-number-of-observations-by-group)
         -   [Calculate means with grouping factor with
             dplyr](#calculate-means-with-grouping-factor-with-dplyr)
         -   [Add trial number in a long dataset with
             dplyr](#add-trial-number-in-a-long-dataset-with-dplyr)
+    -   [ggplot](#ggplot)
+        -   [Plot a summary line across the
+            trials](#plot-a-summary-line-across-the-trials)
+        -   [Set default options for multiple
+            plots](#set-default-options-for-multiple-plots)
+        -   [Plot within-particiants error bars plus individual lines by
+            condition](#plot-within-particiants-error-bars-plus-individual-lines-by-condition)
+        -   [Density plots](#density-plots)
     -   [System Administration Tasks](#system-administration-tasks)
         -   [Creating, deleting, copying files and
             directories](#creating-deleting-copying-files-and-directories)
@@ -51,16 +61,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.30303030
-    ## 2             2  0.65656566
-    ## 3             3  0.43434343
-    ## 4             4  0.34343434
-    ## 5             5  0.02020202
-    ## 6             6  0.24242424
-    ## 7             7  0.41414141
-    ## 8             8  0.06060606
-    ## 9             9  0.80808081
-    ## 10           10  0.05050505
+    ## 1             1  0.07070707
+    ## 2             2  0.14141414
+    ## 3             3  0.18181818
+    ## 4             4  0.79797980
+    ## 5             5  0.19191919
+    ## 6             6  0.40404040
+    ## 7             7  0.51515152
+    ## 8             8  0.46464646
+    ## 9             9  0.09090909
+    ## 10           10  0.89898990
 
 ``` r
 # Participants that we want to exclude
@@ -73,13 +83,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.65656566
-    ## 4             4  0.34343434
-    ## 6             6  0.24242424
-    ## 7             7  0.41414141
-    ## 8             8  0.06060606
-    ## 9             9  0.80808081
-    ## 10           10  0.05050505
+    ## 2             2  0.14141414
+    ## 4             4  0.79797980
+    ## 6             6  0.40404040
+    ## 7             7  0.51515152
+    ## 8             8  0.46464646
+    ## 9             9  0.09090909
+    ## 10           10  0.89898990
 
 ``` r
 # we could also use dplyr
@@ -241,7 +251,7 @@ for (cat in 1:length(selCat)){
 }
 
 # merget the datasets 
-tomerge<-ls(pattern = "*_dat")
+tomerge<-ls(pattern = "*_dat$")
 dataim_all<-as.data.frame(NULL)
 
 for (n in tomerge){
@@ -259,8 +269,8 @@ for (i in 1:length(tomerge)){
 
 ``` r
 # select variables that start with lh or rh
- datasub<-data[, c( grep( "^lh_", names(data), value = TRUE), 
-             grep( "^rh_", names(data), value = TRUE))]
+datasub<-data[, c( grep( "^lh_", names(data), value = TRUE), 
+                   grep( "^rh_", names(data), value = TRUE))]
 
 # select items that ends with "thickness"
 datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
@@ -400,6 +410,29 @@ length(missing_cases)
 
 ### Dplyr
 
+#### Count number of observations by group
+
+``` r
+category %>%
+  group_by(modal_categ) %>%
+  tally()
+```
+
+    ## # A tibble: 30 × 2
+    ##    modal_categ                       n
+    ##    <chr>                         <int>
+    ##  1 Bird                             32
+    ##  2 Bodypart                         18
+    ##  3 Building infrastructure          96
+    ##  4 Building material                27
+    ##  5 Canine                            8
+    ##  6 Clothing                         64
+    ##  7 Crustacean                        8
+    ##  8 Decoration & gift accessory      80
+    ##  9 Electronic device & accessory    91
+    ## 10 Feline                           10
+    ## # … with 20 more rows
+
 #### Calculate means with grouping factor with dplyr
 
 ``` r
@@ -439,7 +472,7 @@ meanGroup
 ``` r
 # create data frame 
 trial_df <- data.frame('subject' = c(rep('101', 3), rep('102', 3)),
-                  'result' = c(32, 33, 64, 12, 18, 14))
+                       'result' = c(32, 33, 64, 12, 18, 14))
 
 # group by subject and add a row number
 # assumes your data frame is ordered by trial number for each subject
@@ -447,6 +480,287 @@ trial_df <- trial_df %>%
   group_by(subject) %>%
   mutate(trial_number = row_number())
 ```
+
+### ggplot
+
+#### Plot a summary line across the trials
+
+``` r
+# load the ggplot library
+library(ggplot2)
+
+# import the toy dataset
+data_long<-read.csv("All_data.csv")
+
+sum_et<-data_long %>%
+  group_by(participant) %>%
+  summarise(et = mean(fixation_error, na.rm = T))
+
+# which participants have the et data?
+part_incl<-sum_et$participant[!is.na(sum_et$et)]
+# select only those
+all_data_et<-data_long[data_long$participant %in% part_incl,]
+
+# reorder the levels
+all_data_et$age_group<-factor(all_data_et$age_group, levels = c("CH", "YA", "OA"))
+all_data_et$type<-factor(all_data_et$type, c("low", "medium", "high", "singletons"))
+
+# look at the data
+head(all_data_et[c("participant", "fixation_prediction", "age_group", "trial_n")])
+```
+
+    ##     participant fixation_prediction age_group trial_n
+    ## 701          59            48.25613        CH      53
+    ## 702          59            48.85646        CH       2
+    ## 703          59                  NA        CH      37
+    ## 704          59                  NA        CH      93
+    ## 705          59            19.06101        CH      12
+    ## 706          59            30.02295        CH      56
+
+``` r
+# now we want to plot a line which summarises the fixation-deviation across the trials, with some errors
+
+# we need to summarise the percentage within participants
+library("Rmisc") # load the library
+```
+
+    ## Loading required package: lattice
+
+    ## Loading required package: plyr
+
+    ## ------------------------------------------------------------------------------
+
+    ## You have loaded plyr after dplyr - this is likely to cause problems.
+    ## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+    ## library(plyr); library(dplyr)
+
+    ## ------------------------------------------------------------------------------
+
+    ## 
+    ## Attaching package: 'plyr'
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+    ##     summarize
+
+``` r
+# sumamrise
+dat_summary_fix_pr<- summarySEwithin(all_data_et,
+                                     measurevar = "fixation_prediction",
+                                     withinvars = "trial_n" , 
+                                     betweenvars = "age_group",
+                                     idvar = "participant", 
+                                     na.rm = T)
+```
+
+    ## Automatically converting the following non-factors to factors: trial_n
+
+``` r
+# conver the trial number as numeric
+dat_summary_fix_pr$trial_n<-as.numeric(dat_summary_fix_pr$trial_n)
+# load the library
+library(ggplot2)
+
+# plot
+ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction, 
+                              # this assigns the color to the group
+                              color = age_group, fill = age_group, 
+                              # this changes the line type as a funciton of group
+                              linetype = age_group, group = 1))+
+  # this adds the line
+  stat_summary(fun.y="mean",geom="line", size = 1.5)+
+  # this add the shadow considering the within-participant standard error
+  geom_ribbon(aes(ymin=fixation_prediction-se, ymax=fixation_prediction+se), alpha=0.5, colour=NA)+
+  # divide the plot as a funtion of age group
+  facet_wrap(.~age_group)+
+  # customise the breaks
+  scale_x_continuous(breaks=seq(1, 100, 19))+
+  
+  # add personalized colours
+   scale_color_manual(values = c(c( "#AA4499" ,"#44AA99","#332288")))+
+
+   # add personalized parmaeters
+    theme(
+    plot.title = element_text(size = 30),
+    axis.title.x = element_text(size = 28),
+    axis.title.y = element_text(size = 28),
+    axis.text=element_text(size=28),
+    legend.text=element_text(size=rel(2)),
+    legend.title = element_text(size=rel(2)), 
+    strip.text.x = element_text(size=28)
+  )+
+  theme(plot.title = element_text(hjust = 0.5))+
+  # use the classic theme
+  theme_classic()
+```
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+``` r
+    # add annotation
+```
+
+#### Set default options for multiple plots
+
+``` r
+# We need to set a function
+custom_param<-function(){
+
+       # add personalized parmaeters
+    theme(
+    plot.title = element_text(size = 30),
+    axis.title.x = element_text(size = 28),
+    axis.title.y = element_text(size = 28),
+    axis.text=element_text(size=28),
+    legend.text=element_text(size=rel(2)),
+    legend.title = element_text(size=rel(2)), 
+    strip.text.x = element_text(size=28)
+   )+
+  theme(plot.title = element_text(hjust = 0.5))
+}
+
+# now plot with those parameters
+ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction, 
+                              # this assigns the color to the group
+                              color = age_group, fill = age_group, 
+                              # this changes the line type as a funciton of group
+                              linetype = age_group, group = 1))+
+  # this adds the line
+  stat_summary(fun.y="mean",geom="line", size = 1.5)+
+  custom_param()+
+  facet_wrap(.~age_group)+
+  theme_classic()
+```
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+#### Plot within-particiants error bars plus individual lines by condition
+
+``` r
+# first, summarise with within-participant error bars
+dat_summary_fix_error<- summarySEwithin(all_data_et,
+                                       measurevar = "fixation_error",
+                                       withinvars = c("type" ), 
+                                       betweenvars = "age_group",
+                                       idvar = "participant", 
+                                       na.rm = T)
+
+# plot it
+# first, aggregate the data by participant, age group, and condition (type)
+ggplot(all_data_et %>%
+         group_by(participant,age_group, type)%>%
+         dplyr::summarise(fixation_error=mean(fixation_error, na.rm=T)), 
+       aes(x = type, y = fixation_error, colour = type ))+
+  # Add some points, which correspond to the participants
+  geom_point(alpha = 0.10, colour = "black" )+
+  # add a line that connect those points by participant
+  geom_line( aes(type, fixation_error,group = participant),
+             size=1, alpha=0.1, stat="summary" , colour = 'black')+
+  # add a summary line (mean)
+  geom_point(stat="summary", size = 5, data = dat_summary_fix_error)+
+  xlab("")+
+  # add the within-participant confidence intervals
+  geom_errorbar(aes( y = fixation_error, ymin = fixation_error - ci, 
+                     ymax = fixation_error + ci),
+                width = 0.40,size = 1.5, data=dat_summary_fix_error)+
+  # divide the plot as a function of age group
+  facet_wrap(.~age_group)+
+  theme_classic()+
+  custom_param()+
+  # delete the x axis text and ticks, as we have the legend
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank()) 
+```
+
+    ## `summarise()` has grouped output by 'participant', 'age_group'. You can
+    ## override using the `.groups` argument.
+    ## No summary function supplied, defaulting to `mean_se()`
+    ## No summary function supplied, defaulting to `mean_se()`
+    ## No summary function supplied, defaulting to `mean_se()`
+    ## No summary function supplied, defaulting to `mean_se()`
+    ## No summary function supplied, defaulting to `mean_se()`
+    ## No summary function supplied, defaulting to `mean_se()`
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-9-1.png)
+\#### Spaghetti plot
+
+``` r
+# Create a spaghetti plot of some subset trials
+  ggplot(all_data_et[all_data_et$trial_n<21,], 
+         aes( x=trial_n, y=fixation_prediction))+
+  # add the "smooth" line, which the regression method ('l,')
+  # and trasparent (0.5)
+    geom_line(stat="smooth",method = "lm", formula=y~x, alpha=0.5, se=F)+
+
+  # specify that we want different colours for different participants
+    aes(colour = factor(participant))+
+  # add the summary line with geom_smooth
+    geom_smooth(method="lm",formula=y~x, se=T, colour = "black" )+
+    theme(strip.text.x = element_text(size = 13))+
+    theme_classic()+
+    theme(panel.spacing = unit(1, "lines"))+
+    facet_wrap(.~age_group)+
+    #ggtitle("Experiment 2")+
+    theme(legend.position = "none")
+```
+
+    ## Warning: Removed 212 rows containing non-finite values (`stat_smooth()`).
+    ## Removed 212 rows containing non-finite values (`stat_smooth()`).
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
+\#### Spaghetti plot with quadratic
+
+``` r
+all_data_et$PE<-as.numeric(all_data_et$PE)
+```
+
+    ## Warning: NAs introduced by coercion
+
+``` r
+ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
+  geom_line(stat="smooth",method = "lm", formula=y~poly(x,2), alpha=0.5, se=F)+
+  aes(colour = factor(participant))+
+  geom_smooth(method="lm",formula=y~poly(x,2), se=T, colour = "black" )+
+  theme(strip.text.x = element_text(size = 13))+
+  theme_classic()+
+  theme(panel.spacing = unit(1, "lines"))+
+  facet_wrap(.~age_group)+
+  #ggtitle("Experiment 2")+
+  theme(legend.position = "none")
+```
+
+    ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
+
+    ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
+
+#### Density plots
+
+``` r
+# Density plots
+Plot_loc<-ggplot(all_data_et, aes(x= location_error, fill=type))
+
+Plot_loc+
+# plot the density in trasparency
+  geom_density(alpha = .5)+
+  theme_classic()+
+  facet_wrap(.~age_group)+
+  
+  # geom_vline(xintercept = thres)+
+  theme(
+    plot.title = element_text(size = 22),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    axis.text=element_text(size=20)
+  )+
+  xlab("location error")+
+  #theme(legend.position = "none")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 ### System Administration Tasks
 
