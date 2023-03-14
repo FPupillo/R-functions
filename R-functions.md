@@ -18,6 +18,8 @@
     -   [Dplyr](#dplyr)
         -   [Count number of observations by
             group](#count-number-of-observations-by-group)
+        -   [Count number of missing cases by
+            group](#count-number-of-missing-cases-by-group)
         -   [Calculate means with grouping factor with
             dplyr](#calculate-means-with-grouping-factor-with-dplyr)
         -   [Add trial number in a long dataset with
@@ -61,16 +63,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.07070707
-    ## 2             2  0.14141414
-    ## 3             3  0.18181818
-    ## 4             4  0.79797980
-    ## 5             5  0.19191919
-    ## 6             6  0.40404040
-    ## 7             7  0.51515152
-    ## 8             8  0.46464646
-    ## 9             9  0.09090909
-    ## 10           10  0.89898990
+    ## 1             1   0.4646465
+    ## 2             2   0.7171717
+    ## 3             3   0.5252525
+    ## 4             4   0.8686869
+    ## 5             5   1.0000000
+    ## 6             6   0.4646465
+    ## 7             7   0.1818182
+    ## 8             8   0.5151515
+    ## 9             9   0.9797980
+    ## 10           10   0.8484848
 
 ``` r
 # Participants that we want to exclude
@@ -83,13 +85,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.14141414
-    ## 4             4  0.79797980
-    ## 6             6  0.40404040
-    ## 7             7  0.51515152
-    ## 8             8  0.46464646
-    ## 9             9  0.09090909
-    ## 10           10  0.89898990
+    ## 2             2   0.7171717
+    ## 4             4   0.8686869
+    ## 6             6   0.4646465
+    ## 7             7   0.1818182
+    ## 8             8   0.5151515
+    ## 9             9   0.9797980
+    ## 10           10   0.8484848
 
 ``` r
 # we could also use dplyr
@@ -433,6 +435,29 @@ category %>%
     ## 10 Feline                           10
     ## # … with 20 more rows
 
+#### Count number of missing cases by group
+
+``` r
+category %>%
+  group_by(modal_categ) %>%
+  dplyr::summarise(CountCase = n(), PercNA = sum(is.na(modal_categ))/n()*100)
+```
+
+    ## # A tibble: 30 × 3
+    ##    modal_categ                   CountCase PercNA
+    ##    <chr>                             <int>  <dbl>
+    ##  1 Bird                                 32      0
+    ##  2 Bodypart                             18      0
+    ##  3 Building infrastructure              96      0
+    ##  4 Building material                    27      0
+    ##  5 Canine                                8      0
+    ##  6 Clothing                             64      0
+    ##  7 Crustacean                            8      0
+    ##  8 Decoration & gift accessory          80      0
+    ##  9 Electronic device & accessory        91      0
+    ## 10 Feline                               10      0
+    ## # … with 20 more rows
+
 #### Calculate means with grouping factor with dplyr
 
 ``` r
@@ -595,7 +620,7 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
   theme_classic()
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 ``` r
     # add annotation
@@ -633,7 +658,7 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
   theme_classic()
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
 #### Plot within-particiants error bars plus individual lines by condition
 
@@ -682,7 +707,7 @@ ggplot(all_data_et %>%
     ## No summary function supplied, defaulting to `mean_se()`
     ## No summary function supplied, defaulting to `mean_se()`
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
 \#### Spaghetti plot
 
 ``` r
@@ -708,7 +733,7 @@ ggplot(all_data_et %>%
     ## Warning: Removed 212 rows containing non-finite values (`stat_smooth()`).
     ## Removed 212 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
 \#### Spaghetti plot with quadratic
 
 ``` r
@@ -734,7 +759,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
 
     ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 #### Density plots
 
@@ -760,7 +785,7 @@ Plot_loc+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
 ### System Administration Tasks
 

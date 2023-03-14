@@ -294,7 +294,13 @@ category %>%
   group_by(modal_categ) %>%
   tally()
 ```
+#### Count number of missing cases by group
 
+```{r}
+category %>%
+  group_by(modal_categ) %>%
+  dplyr::summarise(CountCase = n(), PercNA = sum(is.na(modal_categ))/n()*100)
+```
 
 
 #### Calculate means with grouping factor with dplyr
