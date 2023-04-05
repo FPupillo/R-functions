@@ -41,6 +41,9 @@
             symbol](#select-files-according-to-characters-that-come-before-a-symbol)
         -   [Select files that meet a
             criterion](#select-files-that-meet-a-criterion)
+    -   [Stats](#stats)
+        -   [Sumamry SE within with non-normative
+            means](#sumamry-se-within-with-non-normative-means)
 
 # R functions
 
@@ -63,16 +66,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   0.4646465
-    ## 2             2   0.7171717
-    ## 3             3   0.5252525
-    ## 4             4   0.8686869
-    ## 5             5   1.0000000
-    ## 6             6   0.4646465
-    ## 7             7   0.1818182
-    ## 8             8   0.5151515
-    ## 9             9   0.9797980
-    ## 10           10   0.8484848
+    ## 1             1   0.3030303
+    ## 2             2   0.1010101
+    ## 3             3   0.2929293
+    ## 4             4   0.5151515
+    ## 5             5   0.2626263
+    ## 6             6   0.4949495
+    ## 7             7   0.9090909
+    ## 8             8   0.7575758
+    ## 9             9   0.6565657
+    ## 10           10   0.9898990
 
 ``` r
 # Participants that we want to exclude
@@ -85,13 +88,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.7171717
-    ## 4             4   0.8686869
-    ## 6             6   0.4646465
-    ## 7             7   0.1818182
-    ## 8             8   0.5151515
-    ## 9             9   0.9797980
-    ## 10           10   0.8484848
+    ## 2             2   0.1010101
+    ## 4             4   0.5151515
+    ## 6             6   0.4949495
+    ## 7             7   0.9090909
+    ## 8             8   0.7575758
+    ## 9             9   0.6565657
+    ## 10           10   0.9898990
 
 ``` r
 # we could also use dplyr
@@ -468,6 +471,14 @@ meanGroup<- category %>%
   summarise(meanCateg = mean(cat_agreement),
             Dataset = unique(Dataset)) # keep the other variable
 ```
+
+    ## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+    ## dplyr 1.1.0.
+    ## ℹ Please use `reframe()` instead.
+    ## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+    ##   always returns an ungrouped data frame and adjust accordingly.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
 
     ## `summarise()` has grouped output by 'modal_categ'. You can override using the
     ## `.groups` argument.
@@ -937,3 +948,112 @@ selCsv
 ```
 
     ## [1] "myfile1.csv" "myfile2.csv" "myfile3.csv" "myfile4.csv" "myfile5.csv"
+
+## Stats
+
+### Sumamry SE within with non-normative means
+
+SummarySEwithin from the “Rmisc” package is a very handy function to
+compute within-participant errors (ci, sd, and se). H However, the mean
+returned by this function is normative. If you use summary SE within
+together with ggplot, you might want to use the following version, which
+return the non-normative means.
+
+Taken from:
+
+``` r
+summarySE2 <- function (data = NULL, measurevar, groupvars = NULL, na.rm = TRUE, conf.interval = 0.95) {
+  library(data.table)
+  data <- data.table(data)
+  
+  length2 <- function(x, na.rm = FALSE) {
+    if (na.rm) 
+      sum(!is.na(x))
+    else length(x)
+  }
+  
+  datac <- data[, .(unlist(lapply(.SD, length2, na.rm = na.rm)), 
+                    unlist(lapply(.SD, mean, na.rm = na.rm)),
+                    unlist(lapply(.SD, sd, na.rm = na.rm))),
+                by = groupvars, .SDcols = measurevar]
+  names(datac) <- c(groupvars, "N", measurevar, "sd")
+  setkeyv(datac, groupvars)
+  
+  datac[, se := unlist(sd) / sqrt(unlist(N))] #compute standard error
+  
+  ciMult <- qt(conf.interval / 2 + 0.5, unlist(datac$N) - 1)
+  datac[, ci := se * ciMult]
+  datac <- data.frame(datac)
+  return(datac)
+}
+
+normDataWithin2 <- function (data = NULL, idvar, measurevar, betweenvars = NULL, 
+                             na.rm = TRUE) {
+  library(data.table); library(dplyr)
+  data <- data.table(data)
+  setkeyv(data, idvar)
+  
+  data.subjMean <- data[, .(unlist(lapply(.SD, mean, na.rm = na.rm))), by = idvar, .SDcols = measurevar]
+  names(data.subjMean) <- c(idvar, 'subjMean')
+  data <- merge(data, data.subjMean)
+  setkeyv(data, c(idvar, betweenvars))
+  
+  measureNormedVar <- paste(measurevar, "Normed", sep = "")
+  data <- data.frame(data)
+  
+  data[, measureNormedVar] <- data[, measurevar] - unlist(data[, "subjMean"]) + mean(data[, measurevar], na.rm = na.rm)
+  return(data)
+}
+
+
+#normed and un-normed versions
+summarySEwithin2 <- function (data = NULL, measurevar, betweenvars = NULL, withinvars = NULL, 
+                              idvar = NULL, na.rm = TRUE, conf.interval = 0.95) {
+  
+  # Ensure that the betweenvars and withinvars are factors
+  factorvars <- sapply(data[, c(betweenvars, withinvars), drop = FALSE], 
+                       FUN = is.factor)
+  if (!all(factorvars)) {
+    nonfactorvars <- names(factorvars)[!factorvars]
+    message("Automatically converting the following non-factors to factors: ", 
+            paste(nonfactorvars, collapse = ", "))
+    data[nonfactorvars] <- lapply(data[nonfactorvars], factor)
+  }
+  
+  # Get the means from the un-normed data
+  datac <- summarySE2(data, measurevar, groupvars=c(betweenvars, withinvars),
+                      na.rm=na.rm, conf.interval=conf.interval)
+  
+  # Drop all the unused columns (these will be calculated with normed data)
+  datac$sd <- NULL
+  datac$se <- NULL
+  datac$ci <- NULL
+  
+  # Norm each subject's data
+  ndata <- normDataWithin2(data, idvar, measurevar, betweenvars, na.rm)
+  
+  # This is the name of the new column
+  measurevar_n <- paste(measurevar, "Normed", sep="")
+  
+  # Collapse the normed data - now we can treat between and within vars the same
+  ndatac <- summarySE2(ndata, measurevar_n, groupvars=c(betweenvars, withinvars),
+                       na.rm=na.rm, conf.interval=conf.interval)
+  
+  # Apply correction from Morey (2008) to the standard error and confidence interval
+  #  Get the product of the number of conditions of within-S variables
+  nWithinGroups    <- prod(vapply(ndatac[,withinvars, drop=FALSE], FUN= function(x) length(levels(x)),
+                                  FUN.VALUE=numeric(1)))
+  correctionFactor <- sqrt( nWithinGroups / (nWithinGroups-1) )
+  
+  # Apply the correction factor
+  ndatac$sd <- unlist(ndatac$sd) * correctionFactor
+  ndatac$se <- unlist(ndatac$se) * correctionFactor
+  ndatac$ci <- unlist(ndatac$ci) * correctionFactor
+  
+  # Combine the un-normed means with the normed results
+  merged <- merge(datac, ndatac)
+  #merged[, 1] <- as.numeric(as.character(merged[, 1]))
+  #merged <- merged[order(merged[, 1]), ]
+  return(merged)
+}
+```
