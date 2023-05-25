@@ -10,6 +10,8 @@
         loop)](#go-through-a-list-of-items-and-select-the-ones-that-meet-some-criteria-contains-rm-in-a-loop)
     -   [select items in a dataset that start or end with a
         string](#select-items-in-a-dataset-that-start-or-end-with-a-string)
+    -   [substring before/after a specific
+        character](#substring-beforeafter-a-specific-character)
     -   [Select elements in a vector that start or end with a
         letter](#select-elements-in-a-vector-that-start-or-end-with-a-letter)
     -   [Looping](#looping)
@@ -66,16 +68,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   0.3030303
-    ## 2             2   0.1010101
-    ## 3             3   0.2929293
-    ## 4             4   0.5151515
-    ## 5             5   0.2626263
-    ## 6             6   0.4949495
-    ## 7             7   0.9090909
-    ## 8             8   0.7575758
-    ## 9             9   0.6565657
-    ## 10           10   0.9898990
+    ## 1             1   0.4141414
+    ## 2             2   0.5151515
+    ## 3             3   0.6868687
+    ## 4             4   0.7979798
+    ## 5             5   0.8989899
+    ## 6             6   0.7474747
+    ## 7             7   0.3030303
+    ## 8             8   0.3636364
+    ## 9             9   0.0000000
+    ## 10           10   0.6969697
 
 ``` r
 # Participants that we want to exclude
@@ -88,13 +90,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.1010101
-    ## 4             4   0.5151515
-    ## 6             6   0.4949495
-    ## 7             7   0.9090909
-    ## 8             8   0.7575758
-    ## 9             9   0.6565657
-    ## 10           10   0.9898990
+    ## 2             2   0.5151515
+    ## 4             4   0.7979798
+    ## 6             6   0.7474747
+    ## 7             7   0.3030303
+    ## 8             8   0.3636364
+    ## 9             9   0.0000000
+    ## 10           10   0.6969697
 
 ``` r
 # we could also use dplyr
@@ -281,6 +283,16 @@ datasub<-data[, c( grep( "^lh_", names(data), value = TRUE),
 datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 ```
 
+### substring before/after a specific character
+
+``` r
+# substring the ID depending on what comes before "_" or before ".EDF" 
+sub("\\_.*|\\.EDF", "", files)
+
+# substring depending on whta comes after 'sub-'
+sub("sub-\\.*","", sub)
+```
+
 ### Select elements in a vector that start or end with a letter
 
 ``` r
@@ -436,7 +448,7 @@ category %>%
     ##  8 Decoration & gift accessory      80
     ##  9 Electronic device & accessory    91
     ## 10 Feline                           10
-    ## # … with 20 more rows
+    ## # ℹ 20 more rows
 
 #### Count number of missing cases by group
 
@@ -459,7 +471,7 @@ category %>%
     ##  8 Decoration & gift accessory          80      0
     ##  9 Electronic device & accessory        91      0
     ## 10 Feline                               10      0
-    ## # … with 20 more rows
+    ## # ℹ 20 more rows
 
 #### Calculate means with grouping factor with dplyr
 
@@ -501,7 +513,7 @@ meanGroup
     ##  8 Clothing                    0.848 BOSS-2010 (v.1)
     ##  9 Crustacean                  0.668 BOSS-2014 (v.2)
     ## 10 Crustacean                  0.668 BOSS-2010 (v.1)
-    ## # … with 38 more rows
+    ## # ℹ 38 more rows
 
 #### Add trial number in a long dataset with dplyr
 
@@ -631,7 +643,7 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
   theme_classic()
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
 ``` r
     # add annotation
@@ -669,7 +681,7 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
   theme_classic()
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 #### Plot within-particiants error bars plus individual lines by condition
 
@@ -718,7 +730,7 @@ ggplot(all_data_et %>%
     ## No summary function supplied, defaulting to `mean_se()`
     ## No summary function supplied, defaulting to `mean_se()`
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
 \#### Spaghetti plot
 
 ``` r
@@ -744,7 +756,7 @@ ggplot(all_data_et %>%
     ## Warning: Removed 212 rows containing non-finite values (`stat_smooth()`).
     ## Removed 212 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
 \#### Spaghetti plot with quadratic
 
 ``` r
@@ -770,7 +782,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
 
     ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
 #### Density plots
 
@@ -796,7 +808,7 @@ Plot_loc+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
 ### System Administration Tasks
 

@@ -165,6 +165,15 @@ datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 
 ```
 
+### substring before/after a specific character
+```{R, eval = F}
+# substring the ID depending on what comes before "_" or before ".EDF" 
+sub("\\_.*|\\.EDF", "", files)
+
+# substring depending on whta comes after 'sub-'
+sub("sub-\\.*","", sub)
+
+```
 
 
 ### Select elements in a vector that start or end with a letter
