@@ -192,7 +192,36 @@ Evect<-vect[grep("e$", vect)]
 
 Evect
 ```
-### Looping
+### Reshape a dataset
+```{R}
+# Load the reshape2 package
+library(reshape2)
+
+# create a long dataset 
+# Example long dataset with 3 rows per participant and multiple variables
+long_data <- data.frame(
+  participant = rep(1:10, each = 3), # Example participant IDs
+  time = rep(1:3, times = 10),        # Example time points
+  measurement1 = rnorm(30),           # Example measurements
+  measurement2 = rnorm(30),           # Another example measurement
+  measurement3 = rnorm(30)            # Yet another example measurement
+)
+
+# Melt the long dataset to convert it into a long format
+melted_data <- melt(long_data, id.vars = c("participant", "time"))
+
+# Cast the melted data to wide format
+wide_data <- dcast(melted_data, participant ~ time + variable)
+
+# Print the wide dataset
+print(wide_data)
+
+```
+
+
+
+
+## Looping
 Functions that are used for looping through data
 #### create a progress bar
 ```{r progress bar}

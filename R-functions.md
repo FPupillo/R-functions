@@ -14,35 +14,37 @@
         character](#substring-beforeafter-a-specific-character)
     -   [Select elements in a vector that start or end with a
         letter](#select-elements-in-a-vector-that-start-or-end-with-a-letter)
+    -   [Reshape a dataset](#reshape-a-dataset)
     -   [Looping](#looping)
         -   [Append dataframes in a loop](#append-dataframes-in-a-loop)
         -   [Error Handling](#error-handling)
-    -   [Dplyr](#dplyr)
-        -   [Count number of observations by
-            group](#count-number-of-observations-by-group)
-        -   [Count number of missing cases by
-            group](#count-number-of-missing-cases-by-group)
-        -   [Calculate means with grouping factor with
-            dplyr](#calculate-means-with-grouping-factor-with-dplyr)
-        -   [Add trial number in a long dataset with
-            dplyr](#add-trial-number-in-a-long-dataset-with-dplyr)
-    -   [ggplot](#ggplot)
-        -   [Plot a summary line across the
-            trials](#plot-a-summary-line-across-the-trials)
-        -   [Set default options for multiple
-            plots](#set-default-options-for-multiple-plots)
-        -   [Plot within-particiants error bars plus individual lines by
-            condition](#plot-within-particiants-error-bars-plus-individual-lines-by-condition)
-        -   [Density plots](#density-plots)
-    -   [System Administration Tasks](#system-administration-tasks)
-        -   [Creating, deleting, copying files and
-            directories](#creating-deleting-copying-files-and-directories)
-        -   [Get the script’s directory
-            path](#get-the-scripts-directory-path)
-        -   [Select files according to characters that come before a
-            symbol](#select-files-according-to-characters-that-come-before-a-symbol)
-        -   [Select files that meet a
-            criterion](#select-files-that-meet-a-criterion)
+        -   [Dplyr](#dplyr)
+            -   [Count number of observations by
+                group](#count-number-of-observations-by-group)
+            -   [Count number of missing cases by
+                group](#count-number-of-missing-cases-by-group)
+            -   [Calculate means with grouping factor with
+                dplyr](#calculate-means-with-grouping-factor-with-dplyr)
+            -   [Add trial number in a long dataset with
+                dplyr](#add-trial-number-in-a-long-dataset-with-dplyr)
+        -   [ggplot](#ggplot)
+            -   [Plot a summary line across the
+                trials](#plot-a-summary-line-across-the-trials)
+            -   [Set default options for multiple
+                plots](#set-default-options-for-multiple-plots)
+            -   [Plot within-particiants error bars plus individual
+                lines by
+                condition](#plot-within-particiants-error-bars-plus-individual-lines-by-condition)
+            -   [Density plots](#density-plots)
+        -   [System Administration Tasks](#system-administration-tasks)
+            -   [Creating, deleting, copying files and
+                directories](#creating-deleting-copying-files-and-directories)
+            -   [Get the script’s directory
+                path](#get-the-scripts-directory-path)
+            -   [Select files according to characters that come before a
+                symbol](#select-files-according-to-characters-that-come-before-a-symbol)
+            -   [Select files that meet a
+                criterion](#select-files-that-meet-a-criterion)
     -   [Stats](#stats)
         -   [Sumamry SE within with non-normative
             means](#sumamry-se-within-with-non-normative-means)
@@ -68,16 +70,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1   0.4141414
-    ## 2             2   0.5151515
-    ## 3             3   0.6868687
-    ## 4             4   0.7979798
-    ## 5             5   0.8989899
-    ## 6             6   0.7474747
-    ## 7             7   0.3030303
-    ## 8             8   0.3636364
-    ## 9             9   0.0000000
-    ## 10           10   0.6969697
+    ## 1             1  0.64646465
+    ## 2             2  0.67676768
+    ## 3             3  0.42424242
+    ## 4             4  0.89898990
+    ## 5             5  0.69696970
+    ## 6             6  0.69696970
+    ## 7             7  0.28282828
+    ## 8             8  1.00000000
+    ## 9             9  0.05050505
+    ## 10           10  0.38383838
 
 ``` r
 # Participants that we want to exclude
@@ -90,13 +92,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2   0.5151515
-    ## 4             4   0.7979798
-    ## 6             6   0.7474747
-    ## 7             7   0.3030303
-    ## 8             8   0.3636364
-    ## 9             9   0.0000000
-    ## 10           10   0.6969697
+    ## 2             2  0.67676768
+    ## 4             4  0.89898990
+    ## 6             6  0.69696970
+    ## 7             7  0.28282828
+    ## 8             8  1.00000000
+    ## 9             9  0.05050505
+    ## 10           10  0.38383838
 
 ``` r
 # we could also use dplyr
@@ -316,7 +318,56 @@ Evect
 
     ## [1] "One"   "Three" "Five"
 
-### Looping
+### Reshape a dataset
+
+``` r
+# Load the reshape2 package
+library(reshape2)
+
+# create a long dataset 
+# Example long dataset with 3 rows per participant and multiple variables
+long_data <- data.frame(
+  participant = rep(1:10, each = 3), # Example participant IDs
+  time = rep(1:3, times = 10),        # Example time points
+  measurement1 = rnorm(30),           # Example measurements
+  measurement2 = rnorm(30),           # Another example measurement
+  measurement3 = rnorm(30)            # Yet another example measurement
+)
+
+# Melt the long dataset to convert it into a long format
+melted_data <- melt(long_data, id.vars = c("participant", "time"))
+
+# Cast the melted data to wide format
+wide_data <- dcast(melted_data, participant ~ time + variable)
+
+# Print the wide dataset
+print(wide_data)
+```
+
+    ##    participant 1_measurement1 1_measurement2 1_measurement3 2_measurement1
+    ## 1            1    -0.08963035     0.62681005      0.1925175    -0.12510639
+    ## 2            2    -1.20625013     0.61910382      0.7511278    -0.09914113
+    ## 3            3     0.32590940     0.06382547     -1.2534231     1.73433886
+    ## 4            4    -0.28189309    -1.10610583     -0.3152758     1.24056173
+    ## 5            5     2.25486888     0.88469704     -0.8791598    -0.51203346
+    ## 6            6    -1.25818064    -0.97977142      1.1161485     1.14690267
+    ## 7            7     0.41208833    -0.64679826     -0.1817456    -0.38045024
+    ## 8            8     0.34779928    -0.82156749      0.6449551    -0.81570967
+    ## 9            9     2.09355516    -1.35613749     -0.6361881    -0.77850520
+    ## 10          10    -0.47309035    -1.14703673     -1.1192339    -0.22013040
+    ##    2_measurement2 2_measurement3 3_measurement1 3_measurement2 3_measurement3
+    ## 1      0.05007530     0.03838783     -1.2793675     0.30316808      1.0349780
+    ## 2      0.61124723    -0.32045554      2.4727462     1.05001417     -0.7128920
+    ## 3      0.18780776    -0.77210150     -0.8853824     0.07380372     -0.3706927
+    ## 4      1.57412667    -0.21712311     -0.1520109     0.50820346     -0.3364354
+    ## 5      1.75253424     2.24206355      1.3601917     1.02191926     -0.1596167
+    ## 6     -1.77790004     0.33573437      1.0684715     0.05856914      0.2811033
+    ## 7      0.43998218     1.24274202      0.8340318     0.30251993      2.0030423
+    ## 8      1.70098151     0.75186687     -0.9324585    -1.68339903     -2.8930949
+    ## 9      0.07007485     0.39869209      0.4758882    -0.09716449     -0.2806642
+    ## 10     0.56917764     1.67647758     -0.6333858     0.10058164     -0.6758586
+
+## Looping
 
 Functions that are used for looping through data \#### create a progress
 bar
@@ -643,7 +694,7 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
   theme_classic()
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 ``` r
     # add annotation
@@ -681,7 +732,7 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
   theme_classic()
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
 
 #### Plot within-particiants error bars plus individual lines by condition
 
@@ -730,7 +781,7 @@ ggplot(all_data_et %>%
     ## No summary function supplied, defaulting to `mean_se()`
     ## No summary function supplied, defaulting to `mean_se()`
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-11-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
 \#### Spaghetti plot
 
 ``` r
@@ -756,7 +807,7 @@ ggplot(all_data_et %>%
     ## Warning: Removed 212 rows containing non-finite values (`stat_smooth()`).
     ## Removed 212 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
 \#### Spaghetti plot with quadratic
 
 ``` r
@@ -782,7 +833,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
 
     ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
 #### Density plots
 
@@ -808,7 +859,7 @@ Plot_loc+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 ### System Administration Tasks
 
