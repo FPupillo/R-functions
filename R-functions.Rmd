@@ -519,6 +519,8 @@ ggplot(all_data_et %>%
         axis.ticks.x = element_blank()) 
 
 ```
+
+
 #### Rain-clouds plots
 ```{R}
 # First, we have to install the packages
@@ -556,6 +558,7 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
 
 
 ```
+
 #### Spaghetti plot
 ```{r}
 # Create a spaghetti plot of some subset trials
@@ -578,6 +581,8 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
 
 
 ```
+
+
 #### Spaghetti plot with quadratic
 ```{r}
 all_data_et$PE<-as.numeric(all_data_et$PE)
