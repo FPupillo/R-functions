@@ -70,16 +70,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.64646465
-    ## 2             2  0.67676768
-    ## 3             3  0.42424242
-    ## 4             4  0.89898990
-    ## 5             5  0.69696970
-    ## 6             6  0.69696970
-    ## 7             7  0.28282828
-    ## 8             8  1.00000000
-    ## 9             9  0.05050505
-    ## 10           10  0.38383838
+    ## 1             1   0.6767677
+    ## 2             2   0.2727273
+    ## 3             3   0.8484848
+    ## 4             4   0.4848485
+    ## 5             5   0.8989899
+    ## 6             6   0.8282828
+    ## 7             7   0.3737374
+    ## 8             8   0.8686869
+    ## 9             9   0.8383838
+    ## 10           10   0.5555556
 
 ``` r
 # Participants that we want to exclude
@@ -92,13 +92,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.67676768
-    ## 4             4  0.89898990
-    ## 6             6  0.69696970
-    ## 7             7  0.28282828
-    ## 8             8  1.00000000
-    ## 9             9  0.05050505
-    ## 10           10  0.38383838
+    ## 2             2   0.2727273
+    ## 4             4   0.4848485
+    ## 6             6   0.8282828
+    ## 7             7   0.3737374
+    ## 8             8   0.8686869
+    ## 9             9   0.8383838
+    ## 10           10   0.5555556
 
 ``` r
 # we could also use dplyr
@@ -345,27 +345,27 @@ print(wide_data)
 ```
 
     ##    participant 1_measurement1 1_measurement2 1_measurement3 2_measurement1
-    ## 1            1    -0.08963035     0.62681005      0.1925175    -0.12510639
-    ## 2            2    -1.20625013     0.61910382      0.7511278    -0.09914113
-    ## 3            3     0.32590940     0.06382547     -1.2534231     1.73433886
-    ## 4            4    -0.28189309    -1.10610583     -0.3152758     1.24056173
-    ## 5            5     2.25486888     0.88469704     -0.8791598    -0.51203346
-    ## 6            6    -1.25818064    -0.97977142      1.1161485     1.14690267
-    ## 7            7     0.41208833    -0.64679826     -0.1817456    -0.38045024
-    ## 8            8     0.34779928    -0.82156749      0.6449551    -0.81570967
-    ## 9            9     2.09355516    -1.35613749     -0.6361881    -0.77850520
-    ## 10          10    -0.47309035    -1.14703673     -1.1192339    -0.22013040
+    ## 1            1     -1.5368245      1.3209660    -0.64583135     0.12240539
+    ## 2            2      0.2872271     -0.6451145    -1.50151358     1.42680342
+    ## 3            3      0.5573698     -0.9901809    -0.47492415    -0.10583279
+    ## 4            4     -0.4096123      0.3186436     0.04016116     0.23499362
+    ## 5            5     -0.1831720     -1.7485820     1.86565427     0.70372073
+    ## 6            6     -0.5762607      0.3004373     0.16042955     0.08437331
+    ## 7            7      0.1704925      0.2735225     1.12106729    -0.51241625
+    ## 8            8     -0.6556320      1.2555243     0.46472245     0.59151322
+    ## 9            9     -0.7357513     -0.1787366    -0.69982406    -0.92692674
+    ## 10          10      0.7762179      0.9230214     1.99819433     0.77613296
     ##    2_measurement2 2_measurement3 3_measurement1 3_measurement2 3_measurement3
-    ## 1      0.05007530     0.03838783     -1.2793675     0.30316808      1.0349780
-    ## 2      0.61124723    -0.32045554      2.4727462     1.05001417     -0.7128920
-    ## 3      0.18780776    -0.77210150     -0.8853824     0.07380372     -0.3706927
-    ## 4      1.57412667    -0.21712311     -0.1520109     0.50820346     -0.3364354
-    ## 5      1.75253424     2.24206355      1.3601917     1.02191926     -0.1596167
-    ## 6     -1.77790004     0.33573437      1.0684715     0.05856914      0.2811033
-    ## 7      0.43998218     1.24274202      0.8340318     0.30251993      2.0030423
-    ## 8      1.70098151     0.75186687     -0.9324585    -1.68339903     -2.8930949
-    ## 9      0.07007485     0.39869209      0.4758882    -0.09716449     -0.2806642
-    ## 10     0.56917764     1.67647758     -0.6333858     0.10058164     -0.6758586
+    ## 1     -1.82340782      0.9637179    -0.08331096    -0.13077234      0.2658306
+    ## 2      1.37073704      0.5390848     0.16649460    -0.83993711     -1.9805922
+    ## 3      0.11556083     -0.1449977    -0.25170280     0.88195008      0.1781968
+    ## 4      0.38130236      1.5758233    -1.10908221     0.09638429      2.3441734
+    ## 5      0.02568078     -0.4228020     1.39531116    -1.46311183      0.4308177
+    ## 6     -0.49176436     -0.2554666     1.15441944    -1.06129666     -1.1347453
+    ## 7      0.92104383      0.2817471    -1.68332506    -0.68980413     -1.6209287
+    ## 8      0.18363620     -0.7238194     0.41733991    -0.61354915     -1.8056607
+    ## 9      1.12939581     -1.2865029     0.35870353    -1.00614798     -0.7168031
+    ## 10     0.60215516      0.0588894     0.83238808    -0.27384538      0.1990215
 
 ## Looping
 
@@ -782,6 +782,52 @@ ggplot(all_data_et %>%
     ## No summary function supplied, defaulting to `mean_se()`
 
 ![](R-functions_files/figure-markdown_github/unnamed-chunk-12-1.png)
+\#### Rain-clouds plots
+
+``` r
+# First, we have to install the packages
+source("RainCloudPlots-master/tutorial_R/R_rainclouds.R")
+source("RainCloudPlots-master/tutorial_R/summarySE.R")
+library(cowplot)
+
+ggplot(all_data_et %>%
+         group_by(participant,age_group, type)%>%
+         dplyr::summarise(fixation_error=mean(fixation_error, na.rm=T)), 
+       aes(x = type, y = fixation_error, colour = type ))+
+  
+    geom_flat_violin(aes(colour = type, fill = type),position = position_nudge(x = .1, y = 0),
+                   adjust = 1.5, trim = FALSE, alpha = .5,show.legend = T)+
+  
+geom_boxplot(position = position_nudge(x = 0.1, y = 0),
+               outlier.shape = NA,
+               alpha = .5, width = .1,  colour = "black", show.legend = T)+
+  #geom_point(stat="summary", size = 5, data = dat_summary_hit_rate)+
+  geom_point( aes(type, fixation_error),
+              size=2, alpha=0.5, stat="identity",
+              position = position_jitter(width = .01),
+  )+
+  xlab("")+
+  #geom_point(stat="summary")+
+  #geom_errorbar(aes( y = recog_acc, ymin = recog_acc - ci,
+  #     ymax = recog_acc + ci),
+  # width = 0.20,data=dat_summary_hit_rate)+
+  theme_classic()+
+  custom_param()+
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())+
+  ylab("fixation error")
+```
+
+    ## `summarise()` has grouped output by 'participant', 'age_group'. You can
+    ## override using the `.groups` argument.
+
+    ## Warning: Using the `size` aesthetic with geom_polygon was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use the `linewidth` aesthetic instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
 \#### Spaghetti plot
 
 ``` r
@@ -807,7 +853,7 @@ ggplot(all_data_et %>%
     ## Warning: Removed 212 rows containing non-finite values (`stat_smooth()`).
     ## Removed 212 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
 \#### Spaghetti plot with quadratic
 
 ``` r
@@ -833,7 +879,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
 
     ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 #### Density plots
 
@@ -859,7 +905,7 @@ Plot_loc+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
 ### System Administration Tasks
 

@@ -554,55 +554,6 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
   ylab("fixation error")
 
 
-  # Add some points, which correspond to the participants
-  geom_point(alpha = 0.10, colour = "black" )+
-  # add a line that connect those points by participant
-  geom_line( aes(type, fixation_error,group = participant),
-             size=1, alpha=0.1, stat="summary" , colour = 'black')+
-  # add a summary line (mean)
-  geom_point(stat="summary", size = 5, data = dat_summary_fix_error)+
-  xlab("")+
-  # add the within-participant confidence intervals
-  geom_errorbar(aes( y = fixation_error, ymin = fixation_error - ci, 
-                     ymax = fixation_error + ci),
-                width = 0.40,size = 1.5, data=dat_summary_fix_error)+
-  # divide the plot as a function of age group
-  facet_wrap(.~age_group)+
-  theme_classic()+
-  custom_param()+
-  # delete the x axis text and ticks, as we have the legend
-  theme(axis.text.x = element_blank(), 
-        axis.ticks.x = element_blank()) 
-
-ggplot(wide_data[!is.na(wide_data$age_group),], aes(x = age_group, y = nat_manmade_acc))+
- 
-  geom_flat_violin(aes(colour = age_group, fill = age_group),position = position_nudge(x = .1, y = 0),
-                   adjust = 1.5, trim = FALSE, alpha = .5,show.legend = T)+
-  #geom_point(alpha = 1 , position = position_jitter(width = .5), size = 0.25, shape =20, show.legend = F
-  #  )+
-  # add a line that connect those points by participant
-  #geom_line( aes(TrialType, metadratio,group = vpid),
-  # size=1, alpha=0.05, stat="summary" , colour = 'grey')+
-  #ggtitle("Response Type")+
-  geom_boxplot(aes(x = age_group, y = nat_manmade_acc, fill = age_group),position = position_nudge(x = 0.1, y = 0),
-               outlier.shape = NA,
-               alpha = .5, width = .1,  colour = "black", show.legend = T)+
-  #geom_point(stat="summary", size = 5, data = dat_summary_hit_rate)+
-  geom_point( aes(age_group, nat_manmade_acc),
-              size=2, alpha=0.5, stat="identity",
-              position = position_jitter(width = .01),
-  )+
-  xlab("")+
-  #geom_point(stat="summary")+
-  #geom_errorbar(aes( y = recog_acc, ymin = recog_acc - ci,
-  #     ymax = recog_acc + ci),
-  # width = 0.20,data=dat_summary_hit_rate)+
-  theme_classic()+
-  custom_param()+
-  ylim(0,1)+
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())+
-  ylab("% correct categoriztion")
 
 ```
 #### Spaghetti plot
