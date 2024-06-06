@@ -750,8 +750,8 @@ selCsv<-list.files(pattern= c("myfile.*.csv$"))
 selCsv
 
 ```
-## Stats
-### Sumamry SE within with non-normative means
+### Stats
+#### Sumamry SE within with non-normative means
 SummarySEwithin from the "Rmisc" package is a very handy function to compute
 within-participant errors (ci, sd, and se). H
 However, the mean returned by this function is normative. If you use summary
@@ -857,6 +857,36 @@ summarySEwithin2 <- function (data = NULL, measurevar, betweenvars = NULL, withi
 }
 
 
+
+```
+
+#### bootstrapping regression
+Bootstrap is a method for running robust regression on data for which we do not know the sampling distribution. Bootstrapping regression allows to get around this problem by estimating the properties of the sampling distribution from the data. The sample data are treated as a population from which smaller samples (called bootstrap samples) are taken (with replacement). The parameter of interest (e.g., the slope in a regression) is then calculated in each bootstrap sample. This process is repeated n times, one for each bootstrap sample. We can then order the obtained parameters and and calculate trhe limits whithin which 95% of the samples fall. These values are the 95% confidence intervals of the parameters. 
+```{r}
+# load the package that runs the bootstrap
+library(boot)
+
+# We first need to create a custom-made function that draws samples and run the regression
+bootfunc<-function(dataset, random, formula){
+  d<-dataset[random,]
+  reg<-lm(formula, data = d)
+  regsum<-summary(reg)
+  funcoef<-regsum$coefficients[2]
+  booted.paths<-c(funcoef)
+  return<-booted.paths
+}
+
+# now let's run a regression our dataset
+formula<-measurement1~measurement2
+reg<-lm(formula, data = long_data)
+
+summary(reg)
+
+# now run 5000 bootstrap
+bootresults <- boot(data = long_data,formula = formula, statistic = bootfunc, R = 5000)
+ funcoef <- boot.ci(bootresults, index = 1, conf = .95, type = "bca")
+# print the results
+funcoef
 
 ```
 

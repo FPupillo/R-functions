@@ -49,9 +49,10 @@
                 symbol](#select-files-according-to-characters-that-come-before-a-symbol)
             -   [Select files that meet a
                 criterion](#select-files-that-meet-a-criterion)
-    -   [Stats](#stats)
-        -   [Sumamry SE within with non-normative
-            means](#sumamry-se-within-with-non-normative-means)
+        -   [Stats](#stats)
+            -   [Sumamry SE within with non-normative
+                means](#sumamry-se-within-with-non-normative-means)
+            -   [bootstrapping regression](#bootstrapping-regression)
 
 # R functions
 
@@ -74,16 +75,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.47474747
-    ## 2             2  0.00000000
-    ## 3             3  0.38383838
-    ## 4             4  0.70707071
-    ## 5             5  0.30303030
-    ## 6             6  0.02020202
-    ## 7             7  0.32323232
-    ## 8             8  0.98989899
-    ## 9             9  0.13131313
-    ## 10           10  0.10101010
+    ## 1             1  0.30303030
+    ## 2             2  0.40404040
+    ## 3             3  0.16161616
+    ## 4             4  0.23232323
+    ## 5             5  0.10101010
+    ## 6             6  0.76767677
+    ## 7             7  0.68686869
+    ## 8             8  0.74747475
+    ## 9             9  0.03030303
+    ## 10           10  0.79797980
 
 ``` r
 # Participants that we want to exclude
@@ -96,13 +97,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.00000000
-    ## 4             4  0.70707071
-    ## 6             6  0.02020202
-    ## 7             7  0.32323232
-    ## 8             8  0.98989899
-    ## 9             9  0.13131313
-    ## 10           10  0.10101010
+    ## 2             2  0.40404040
+    ## 4             4  0.23232323
+    ## 6             6  0.76767677
+    ## 7             7  0.68686869
+    ## 8             8  0.74747475
+    ## 9             9  0.03030303
+    ## 10           10  0.79797980
 
 ``` r
 # we could also use dplyr
@@ -349,27 +350,27 @@ print(wide_data)
 ```
 
     ##    participant 1_measurement1 1_measurement2 1_measurement3 2_measurement1
-    ## 1            1     -0.6214342     0.07907656    0.008575823     -0.4028008
-    ## 2            2      1.0726980     0.36741085    1.074955625     -1.6977975
-    ## 3            3      0.3878151     0.13959652    0.119440505     -1.2626555
-    ## 4            4     -0.7601188     0.20995775    0.399297867      0.9409407
-    ## 5            5      0.4635077     0.55263042   -0.114445115      0.2622236
-    ## 6            6      0.8678018    -1.10688951    0.366300426      1.3307368
-    ## 7            7      0.5956389     1.19765902   -0.124585164      1.9675533
-    ## 8            8      0.9882557     1.05233007   -0.949386245      0.1020029
-    ## 9            9      0.9897663    -1.25345095    1.422901883      0.8406064
-    ## 10          10     -1.1567499     0.46478595    0.054933354      0.2228570
+    ## 1            1      0.4915414      0.5511764     0.03198559      1.2783319
+    ## 2            2     -0.3685422     -1.0696026    -1.68190709      1.4476437
+    ## 3            3      0.3795542      2.0832084     1.21076614      0.8543442
+    ## 4            4      1.4326654     -2.0755559    -0.46706915     -0.6462913
+    ## 5            5      0.1975330     -0.4453884    -2.13167533     -0.1183552
+    ## 6            6     -0.3466583     -1.5128910    -1.24383795     -1.3279748
+    ## 7            7      2.0616855     -0.5910376     0.21373939      1.8078863
+    ## 8            8      0.3570178     -0.4796290    -1.24970010      1.7425421
+    ## 9            9      0.7169502     -0.8973055    -0.08491099     -0.0502722
+    ## 10          10      0.8455899     -0.5436680     1.58566617      1.0982473
     ##    2_measurement2 2_measurement3 3_measurement1 3_measurement2 3_measurement3
-    ## 1      -0.4220136     0.42710204     0.32527903     0.44431436    -1.14968804
-    ## 2      -0.2829292     0.95042467    -0.31523943    -0.08331602    -1.86304420
-    ## 3      -0.3051772    -0.09955554    -1.58216564    -2.14299655    -0.04286995
-    ## 4      -1.3107991    -0.78079132    -0.04796167    -0.68543947     1.49709434
-    ## 5       1.1294929     0.20555925    -0.80007309     0.11101639    -0.94585989
-    ## 6      -1.5065228    -0.42243005    -1.73706061     0.59356761     1.06501130
-    ## 7       0.1917428    -0.76768651     0.60901509    -0.14747352    -0.87088694
-    ## 8       1.8387495     3.18863081     1.65997905    -0.39077587    -0.70007690
-    ## 9      -0.4277630     0.64472358     0.79932265    -0.32742786    -0.14961051
-    ## 10      0.1203959    -1.10896616    -1.63135306     0.35397074    -0.21169723
+    ## 1       0.3352289     -0.8884100    -0.25341537      0.3236068     -1.1515501
+    ## 2      -0.2400215     -0.2968618     0.50172795     -2.1545516      1.8152688
+    ## 3      -0.1043591      2.1266264     1.38244589     -0.8818967     -0.5116959
+    ## 4       1.4166319     -0.9922311    -0.03362436      0.3785990      2.1877748
+    ## 5       1.2327761      0.2390262    -0.21736271      0.8282466     -0.5078326
+    ## 6       0.6768794     -0.6955942     0.60299333      0.3700886     -0.1934974
+    ## 7       0.3187108     -0.4925152     0.26671174      0.7790300     -0.7218299
+    ## 8       0.6836961      0.9523740     0.70157180      2.2092666      0.1187719
+    ## 9      -1.2381762      0.8757067    -0.91854755      1.3577626      0.2781411
+    ## 10     -0.7019203     -1.5246421    -0.36836158      1.3837276     -1.2076033
 
 ## Looping
 
@@ -856,8 +857,10 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
     theme(legend.position = "none")
 ```
 
-    ## Warning: Removed 212 rows containing non-finite values (`stat_smooth()`).
-    ## Removed 212 rows containing non-finite values (`stat_smooth()`).
+    ## Warning: Removed 212 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+    ## Removed 212 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
 
 ![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
@@ -882,9 +885,11 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
   theme(legend.position = "none")
 ```
 
-    ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
+    ## Warning: Removed 930 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
 
-    ## Warning: Removed 930 rows containing non-finite values (`stat_smooth()`).
+    ## Warning: Removed 930 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
 
 ![](R-functions_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
@@ -1065,9 +1070,9 @@ selCsv
 
     ## [1] "myfile1.csv" "myfile2.csv" "myfile3.csv" "myfile4.csv" "myfile5.csv"
 
-## Stats
+### Stats
 
-### Sumamry SE within with non-normative means
+#### Sumamry SE within with non-normative means
 
 SummarySEwithin from the “Rmisc” package is a very handy function to
 compute within-participant errors (ci, sd, and se). H However, the mean
@@ -1173,3 +1178,85 @@ summarySEwithin2 <- function (data = NULL, measurevar, betweenvars = NULL, withi
   return(merged)
 }
 ```
+
+#### bootstrapping regression
+
+Bootstrap is a method for running robust regression on data for which we
+do not know the sampling distribution. Bootstrapping regression allows
+to get around this problem by estimating the properties of the sampling
+distribution from the data. The sample data are treated as a population
+from which smaller samples (called bootstrap samples) are taken (with
+replacement). The parameter of interest (e.g., the slope in a
+regression) is then calculated in each bootstrap sample. This process is
+repeated n times, one for each bootstrap sample. We can then order the
+obtained parameters and and calculate trhe limits whithin which 95% of
+the samples fall. These values are the 95% confidence intervals of the
+parameters.
+
+``` r
+# load the package that runs the bootstrap
+library(boot)
+```
+
+    ## 
+    ## Attaching package: 'boot'
+
+    ## The following object is masked from 'package:lattice':
+    ## 
+    ##     melanoma
+
+``` r
+# We first need to create a custom-made function that draws samples and run the regression
+bootfunc<-function(dataset, random, formula){
+  d<-dataset[random,]
+  reg<-lm(formula, data = d)
+  regsum<-summary(reg)
+  funcoef<-regsum$coefficients[2]
+  booted.paths<-c(funcoef)
+  return<-booted.paths
+}
+
+# now let's run a regression our dataset
+formula<-measurement1~measurement2
+reg<-lm(formula, data = long_data)
+
+summary(reg)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = formula, data = long_data)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.64969 -0.53242  0.01474  0.51878  1.47231 
+    ## 
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)   
+    ## (Intercept)    0.4646     0.1505   3.086  0.00453 **
+    ## measurement2  -0.2111     0.1360  -1.552  0.13181   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.823 on 28 degrees of freedom
+    ## Multiple R-squared:  0.07924,    Adjusted R-squared:  0.04636 
+    ## F-statistic:  2.41 on 1 and 28 DF,  p-value: 0.1318
+
+``` r
+# now run 5000 bootstrap
+bootresults <- boot(data = long_data,formula = formula, statistic = bootfunc, R = 5000)
+ funcoef <- boot.ci(bootresults, index = 1, conf = .95, type = "bca")
+# print the results
+funcoef
+```
+
+    ## BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+    ## Based on 5000 bootstrap replicates
+    ## 
+    ## CALL : 
+    ## boot.ci(boot.out = bootresults, conf = 0.95, type = "bca", index = 1)
+    ## 
+    ## Intervals : 
+    ## Level       BCa          
+    ## 95%   (-0.4905,  0.0195 )  
+    ## Calculations and Intervals on Original Scale
