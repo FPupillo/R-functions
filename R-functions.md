@@ -36,10 +36,15 @@
                 lines by
                 condition](#plot-within-particiants-error-bars-plus-individual-lines-by-condition)
             -   [Rain-clouds plots](#rain-clouds-plots)
+        -   [Add a line that connects the means in rain-clouds
+            plots](#add-a-line-that-connects-the-means-in-rain-clouds-plots)
             -   [Spaghetti plot](#spaghetti-plot)
             -   [Spaghetti plot with
                 quadratic](#spaghetti-plot-with-quadratic)
             -   [Density plots](#density-plots)
+        -   [Combine two plots in one (note that the size of the
+            components need to be adjusted prior to
+            arranging)](#combine-two-plots-in-one-note-that-the-size-of-the-components-need-to-be-adjusted-prior-to-arranging)
         -   [System Administration Tasks](#system-administration-tasks)
             -   [Creating, deleting, copying files and
                 directories](#creating-deleting-copying-files-and-directories)
@@ -75,16 +80,16 @@ df
 ```
 
     ##    participants performance
-    ## 1             1  0.30303030
-    ## 2             2  0.40404040
-    ## 3             3  0.16161616
-    ## 4             4  0.23232323
-    ## 5             5  0.10101010
-    ## 6             6  0.76767677
-    ## 7             7  0.68686869
-    ## 8             8  0.74747475
-    ## 9             9  0.03030303
-    ## 10           10  0.79797980
+    ## 1             1   0.7373737
+    ## 2             2   0.3838384
+    ## 3             3   0.9696970
+    ## 4             4   0.3838384
+    ## 5             5   0.4444444
+    ## 6             6   0.2929293
+    ## 7             7   0.4747475
+    ## 8             8   0.1616162
+    ## 9             9   0.2424242
+    ## 10           10   0.8282828
 
 ``` r
 # Participants that we want to exclude
@@ -97,13 +102,13 @@ df
 ```
 
     ##    participants performance
-    ## 2             2  0.40404040
-    ## 4             4  0.23232323
-    ## 6             6  0.76767677
-    ## 7             7  0.68686869
-    ## 8             8  0.74747475
-    ## 9             9  0.03030303
-    ## 10           10  0.79797980
+    ## 2             2   0.3838384
+    ## 4             4   0.3838384
+    ## 6             6   0.2929293
+    ## 7             7   0.4747475
+    ## 8             8   0.1616162
+    ## 9             9   0.2424242
+    ## 10           10   0.8282828
 
 ``` r
 # we could also use dplyr
@@ -350,27 +355,27 @@ print(wide_data)
 ```
 
     ##    participant 1_measurement1 1_measurement2 1_measurement3 2_measurement1
-    ## 1            1      0.4915414      0.5511764     0.03198559      1.2783319
-    ## 2            2     -0.3685422     -1.0696026    -1.68190709      1.4476437
-    ## 3            3      0.3795542      2.0832084     1.21076614      0.8543442
-    ## 4            4      1.4326654     -2.0755559    -0.46706915     -0.6462913
-    ## 5            5      0.1975330     -0.4453884    -2.13167533     -0.1183552
-    ## 6            6     -0.3466583     -1.5128910    -1.24383795     -1.3279748
-    ## 7            7      2.0616855     -0.5910376     0.21373939      1.8078863
-    ## 8            8      0.3570178     -0.4796290    -1.24970010      1.7425421
-    ## 9            9      0.7169502     -0.8973055    -0.08491099     -0.0502722
-    ## 10          10      0.8455899     -0.5436680     1.58566617      1.0982473
+    ## 1            1     -1.3646162      1.3357079     -1.1264654     0.40590780
+    ## 2            2     -0.5227282     -1.2726066      1.1841556    -1.56900469
+    ## 3            3     -0.8137276      0.4273476     -0.3303401    -0.01928193
+    ## 4            4      2.0049606     -0.3902477     -0.8201857    -0.55360007
+    ## 5            5      0.7848779     -0.2956481      1.8532297     0.46621599
+    ## 6            6     -0.3981526     -0.1683850     -0.7354067    -0.52380332
+    ## 7            7      0.6168212      0.5225789      1.1883458     1.09158708
+    ## 8            8     -1.1025959      0.6629259     -0.4258561     1.32185738
+    ## 9            9      0.9560861      0.1859792     -1.0107966     1.45223461
+    ## 10          10      0.8161719      1.2371424     -1.8866513    -1.15969554
     ##    2_measurement2 2_measurement3 3_measurement1 3_measurement2 3_measurement3
-    ## 1       0.3352289     -0.8884100    -0.25341537      0.3236068     -1.1515501
-    ## 2      -0.2400215     -0.2968618     0.50172795     -2.1545516      1.8152688
-    ## 3      -0.1043591      2.1266264     1.38244589     -0.8818967     -0.5116959
-    ## 4       1.4166319     -0.9922311    -0.03362436      0.3785990      2.1877748
-    ## 5       1.2327761      0.2390262    -0.21736271      0.8282466     -0.5078326
-    ## 6       0.6768794     -0.6955942     0.60299333      0.3700886     -0.1934974
-    ## 7       0.3187108     -0.4925152     0.26671174      0.7790300     -0.7218299
-    ## 8       0.6836961      0.9523740     0.70157180      2.2092666      0.1187719
-    ## 9      -1.2381762      0.8757067    -0.91854755      1.3577626      0.2781411
-    ## 10     -0.7019203     -1.5246421    -0.36836158      1.3837276     -1.2076033
+    ## 1      -1.4431244     1.16272469     2.32752120     1.72611433    -0.09602687
+    ## 2      -0.9902413    -1.85475814     0.01768033     1.50878921     0.29782419
+    ## 3      -1.3128529     0.08710345    -0.31128807    -0.74920102    -0.34943942
+    ## 4       1.2232879    -0.81050285     0.17941727    -0.06273997    -0.41756646
+    ## 5      -0.1797314    -1.03412790     0.25001613    -0.43837575     0.55327006
+    ## 6      -0.8863547    -0.14767523    -1.13776194     1.87547235     0.12379534
+    ## 7      -0.8724806     0.50671794    -0.41941722     1.06498970     0.28239274
+    ## 8       0.7865213     0.18039751    -1.10264395     2.42614014    -0.76975452
+    ## 9       0.9615018     1.06718996    -0.82164717    -0.17879297     0.57100000
+    ## 10      0.8244921    -2.27437893     1.58937633    -0.65761457    -1.87574338
 
 ## Looping
 
@@ -796,7 +801,7 @@ source("RainCloudPlots-master/tutorial_R/R_rainclouds.R")
 source("RainCloudPlots-master/tutorial_R/summarySE.R")
 library(cowplot)
 
-ggplot(all_data_et %>%
+rain_clouds<-ggplot(all_data_et %>%
          group_by(participant,age_group, type)%>%
          dplyr::summarise(fixation_error=mean(fixation_error, na.rm=T)), 
        aes(x = type, y = fixation_error, colour = type ))+
@@ -827,6 +832,10 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
     ## `summarise()` has grouped output by 'participant', 'age_group'. You can
     ## override using the `.groups` argument.
 
+``` r
+rain_clouds
+```
+
     ## Warning: Using the `size` aesthetic with geom_polygon was deprecated in ggplot2 3.4.0.
     ## ℹ Please use the `linewidth` aesthetic instead.
     ## This warning is displayed once every 8 hours.
@@ -834,6 +843,18 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
     ## generated.
 
 ![](R-functions_files/figure-markdown_github/unnamed-chunk-13-1.png)
+
+### Add a line that connects the means in rain-clouds plots
+
+``` r
+rain_clouds_line<-rain_clouds+
+    stat_summary(fun = median, geom = "path", # you could also add "summary", or "identity"
+               mapping = aes(group = -1), colour = "black", linetype = 3)
+
+rain_clouds_line
+```
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
 #### Spaghetti plot
 
@@ -862,7 +883,7 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
     ## Removed 212 rows containing non-finite outside the scale range
     ## (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-14-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 #### Spaghetti plot with quadratic
 
@@ -891,7 +912,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
     ## Warning: Removed 930 rows containing non-finite outside the scale range
     ## (`stat_smooth()`).
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
 #### Density plots
 
@@ -899,7 +920,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
 # Density plots
 Plot_loc<-ggplot(all_data_et, aes(x= location_error, fill=type))
 
-Plot_loc+
+density_plot<-Plot_loc+
 # plot the density in trasparency
   geom_density(alpha = .5)+
   theme_classic()+
@@ -915,9 +936,37 @@ Plot_loc+
   xlab("location error")+
   #theme(legend.position = "none")+
   theme(plot.title = element_text(hjust = 0.5))
+
+density_plot
 ```
 
-![](R-functions_files/figure-markdown_github/unnamed-chunk-16-1.png)
+![](R-functions_files/figure-markdown_github/unnamed-chunk-17-1.png)
+
+### Combine two plots in one (note that the size of the components need to be adjusted prior to arranging)
+
+``` r
+library(ggpubr)
+```
+
+    ## 
+    ## Attaching package: 'ggpubr'
+
+    ## The following object is masked from 'package:cowplot':
+    ## 
+    ##     get_legend
+
+    ## The following object is masked from 'package:plyr':
+    ## 
+    ##     mutate
+
+``` r
+ggarrange(rain_clouds, density_plot, 
+          labels = c("A)", "B)"),
+          ncol = 1, nrow = 2, 
+          font.label = list(size = 15, face = "bold"))
+```
+
+![](R-functions_files/figure-markdown_github/unnamed-chunk-18-1.png)
 
 ### System Administration Tasks
 
@@ -1229,18 +1278,16 @@ summary(reg)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.64969 -0.53242  0.01474  0.51878  1.47231 
+    ## -1.76698 -0.84456 -0.09529  0.78575  2.38787 
     ## 
     ## Coefficients:
-    ##              Estimate Std. Error t value Pr(>|t|)   
-    ## (Intercept)    0.4646     0.1505   3.086  0.00453 **
-    ## measurement2  -0.2111     0.1360  -1.552  0.13181   
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ##              Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)    0.1038     0.1987   0.522    0.605
+    ## measurement2  -0.0951     0.1888  -0.504    0.618
     ## 
-    ## Residual standard error: 0.823 on 28 degrees of freedom
-    ## Multiple R-squared:  0.07924,    Adjusted R-squared:  0.04636 
-    ## F-statistic:  2.41 on 1 and 28 DF,  p-value: 0.1318
+    ## Residual standard error: 1.062 on 28 degrees of freedom
+    ## Multiple R-squared:  0.008981,   Adjusted R-squared:  -0.02641 
+    ## F-statistic: 0.2537 on 1 and 28 DF,  p-value: 0.6184
 
 ``` r
 # now run 5000 bootstrap
@@ -1258,5 +1305,5 @@ funcoef
     ## 
     ## Intervals : 
     ## Level       BCa          
-    ## 95%   (-0.4905,  0.0195 )  
+    ## 95%   (-0.4243,  0.3827 )  
     ## Calculations and Intervals on Original Scale

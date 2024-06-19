@@ -528,7 +528,7 @@ source("RainCloudPlots-master/tutorial_R/R_rainclouds.R")
 source("RainCloudPlots-master/tutorial_R/summarySE.R")
 library(cowplot)
 
-ggplot(all_data_et %>%
+rain_clouds<-ggplot(all_data_et %>%
          group_by(participant,age_group, type)%>%
          dplyr::summarise(fixation_error=mean(fixation_error, na.rm=T)), 
        aes(x = type, y = fixation_error, colour = type ))+
@@ -556,6 +556,17 @@ geom_boxplot(position = position_nudge(x = 0.1, y = 0),
   ylab("fixation error")
 
 
+rain_clouds
+```
+
+### Add a line that connects the means in rain-clouds plots
+```{R}
+
+rain_clouds_line<-rain_clouds+
+    stat_summary(fun = median, geom = "path", # you could also add "summary", or "identity"
+               mapping = aes(group = -1), colour = "black", linetype = 3)
+
+rain_clouds_line
 
 ```
 
@@ -603,7 +614,7 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
 # Density plots
 Plot_loc<-ggplot(all_data_et, aes(x= location_error, fill=type))
 
-Plot_loc+
+density_plot<-Plot_loc+
 # plot the density in trasparency
   geom_density(alpha = .5)+
   theme_classic()+
@@ -620,9 +631,18 @@ Plot_loc+
   #theme(legend.position = "none")+
   theme(plot.title = element_text(hjust = 0.5))
 
+density_plot
+
 ```
 
-
+### Combine two plots in one (note that the size of the components need to be adjusted prior to arranging)
+```{R}
+library(ggpubr)
+ggarrange(rain_clouds, density_plot, 
+          labels = c("A)", "B)"),
+          ncol = 1, nrow = 2, 
+          font.label = list(size = 15, face = "bold"))
+```
 
 ### System Administration Tasks
 
