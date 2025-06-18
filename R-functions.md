@@ -1,4 +1,6 @@
 -   [R functions](#r-functions)
+    -   [Check if required packages are installed, install them if
+        not](#check-if-required-packages-are-installed-install-them-if-not)
     -   [Exclude rows based on a set of criteria (or
         participants)](#exclude-rows-based-on-a-set-of-criteria-or-participants)
     -   [Count the arguments of a
@@ -67,52 +69,23 @@ psychology.
 For any question, feel free to drop me an email :
 <pupillo@psych.uni-frankfurt.de>
 
-### Exclude rows based on a set of criteria (or participants)
-
-Useful code to exclude rows in a dataset that corresponds to
-participants we decided to exclude.
+### Check if required packages are installed, install them if not
 
 ``` r
-# create fake dataframe with participants and performance columns
-df<-data.frame(participants=seq(1:10), performance= sample(seq(0, 1, length.out = 100), 10, T))
+# Define the list of required packages
+required_packages <- c("dplyr", "ggplot2", "tidyr", "readr")
 
-df
-```
+# Check which packages are not installed
+# call all the isntalled packages with the "installed.packages()" function
+missing_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 
-    ##    participants performance
-    ## 1             1   0.7373737
-    ## 2             2   0.3838384
-    ## 3             3   0.9696970
-    ## 4             4   0.3838384
-    ## 5             5   0.4444444
-    ## 6             6   0.2929293
-    ## 7             7   0.4747475
-    ## 8             8   0.1616162
-    ## 9             9   0.2424242
-    ## 10           10   0.8282828
+# Install missing packages
+if (length(missing_packages)) {
+  install.packages(missing_packages)
+}
 
-``` r
-# Participants that we want to exclude
-partExcl<-c(1,3,5)
-
-# code to exclude participants
-df<-df[!df$participants %in% partExcl, ]
-
-df
-```
-
-    ##    participants performance
-    ## 2             2   0.3838384
-    ## 4             4   0.3838384
-    ## 6             6   0.2929293
-    ## 7             7   0.4747475
-    ## 8             8   0.1616162
-    ## 9             9   0.2424242
-    ## 10           10   0.8282828
-
-``` r
-# we could also use dplyr
-library(dplyr)
+# Optionally load all packages
+lapply(required_packages, library, character.only = TRUE)
 ```
 
     ## 
@@ -126,7 +99,69 @@ library(dplyr)
     ## 
     ##     intersect, setdiff, setequal, union
 
+    ## [[1]]
+    ## [1] "dplyr"     "stats"     "graphics"  "grDevices" "utils"     "datasets" 
+    ## [7] "methods"   "base"     
+    ## 
+    ## [[2]]
+    ## [1] "ggplot2"   "dplyr"     "stats"     "graphics"  "grDevices" "utils"    
+    ## [7] "datasets"  "methods"   "base"     
+    ## 
+    ## [[3]]
+    ##  [1] "tidyr"     "ggplot2"   "dplyr"     "stats"     "graphics"  "grDevices"
+    ##  [7] "utils"     "datasets"  "methods"   "base"     
+    ## 
+    ## [[4]]
+    ##  [1] "readr"     "tidyr"     "ggplot2"   "dplyr"     "stats"     "graphics" 
+    ##  [7] "grDevices" "utils"     "datasets"  "methods"   "base"
+
+### Exclude rows based on a set of criteria (or participants)
+
+Useful code to exclude rows in a dataset that corresponds to
+participants we decided to exclude.
+
 ``` r
+# create fake dataframe with participants and performance columns
+df<-data.frame(participants=seq(1:10), performance= sample(seq(0, 1, length.out = 100), 10, T))
+
+df
+```
+
+    ##    participants performance
+    ## 1             1  0.69696970
+    ## 2             2  0.38383838
+    ## 3             3  0.62626263
+    ## 4             4  0.05050505
+    ## 5             5  0.26262626
+    ## 6             6  0.29292929
+    ## 7             7  0.86868687
+    ## 8             8  0.80808081
+    ## 9             9  0.90909091
+    ## 10           10  0.98989899
+
+``` r
+# Participants that we want to exclude
+partExcl<-c(1,3,5)
+
+# code to exclude participants
+df<-df[!df$participants %in% partExcl, ]
+
+df
+```
+
+    ##    participants performance
+    ## 2             2  0.38383838
+    ## 4             4  0.05050505
+    ## 6             6  0.29292929
+    ## 7             7  0.86868687
+    ## 8             8  0.80808081
+    ## 9             9  0.90909091
+    ## 10           10  0.98989899
+
+``` r
+# we could also use dplyr
+library(dplyr)
+
 df<- df %>%
   filter(!participants %in% partExcl)
 ```
@@ -212,6 +247,11 @@ This example is based on the BOSS dataset
 ``` r
 # we need the readxl package to read the excel file with the object info
 library(readxl)
+```
+
+    ## Warning: package 'readxl' was built under R version 4.4.3
+
+``` r
 # and dplyr for intabulating
 library(dplyr)
 
@@ -333,7 +373,16 @@ Evect
 ``` r
 # Load the reshape2 package
 library(reshape2)
+```
 
+    ## 
+    ## Attaching package: 'reshape2'
+
+    ## The following object is masked from 'package:tidyr':
+    ## 
+    ##     smiths
+
+``` r
 # create a long dataset 
 # Example long dataset with 3 rows per participant and multiple variables
 long_data <- data.frame(
@@ -355,27 +404,27 @@ print(wide_data)
 ```
 
     ##    participant 1_measurement1 1_measurement2 1_measurement3 2_measurement1
-    ## 1            1     -1.3646162      1.3357079     -1.1264654     0.40590780
-    ## 2            2     -0.5227282     -1.2726066      1.1841556    -1.56900469
-    ## 3            3     -0.8137276      0.4273476     -0.3303401    -0.01928193
-    ## 4            4      2.0049606     -0.3902477     -0.8201857    -0.55360007
-    ## 5            5      0.7848779     -0.2956481      1.8532297     0.46621599
-    ## 6            6     -0.3981526     -0.1683850     -0.7354067    -0.52380332
-    ## 7            7      0.6168212      0.5225789      1.1883458     1.09158708
-    ## 8            8     -1.1025959      0.6629259     -0.4258561     1.32185738
-    ## 9            9      0.9560861      0.1859792     -1.0107966     1.45223461
-    ## 10          10      0.8161719      1.2371424     -1.8866513    -1.15969554
+    ## 1            1     0.28352387     -0.0894972     -0.1380867     -0.6230732
+    ## 2            2     0.93473095     -0.3504418      1.1514078      0.9238881
+    ## 3            3    -0.68519791      0.5793657     -2.3157975     -2.2195389
+    ## 4            4    -0.06091962      0.7073143      0.8979930     -1.4070143
+    ## 5            5     2.63851438     -0.3333422      2.3640442      0.3691003
+    ## 6            6    -0.47086574      1.3471321     -0.4317312      0.3037831
+    ## 7            7     1.43197829      0.9955931      1.4682282      0.1394636
+    ## 8            8    -0.50697117     -1.0439044     -0.4638288     -0.8898139
+    ## 9            9    -0.68726793     -0.5601780     -1.9137684     -0.7236043
+    ## 10          10     0.75019679     -2.0040950     -2.0906997     -0.6960868
     ##    2_measurement2 2_measurement3 3_measurement1 3_measurement2 3_measurement3
-    ## 1      -1.4431244     1.16272469     2.32752120     1.72611433    -0.09602687
-    ## 2      -0.9902413    -1.85475814     0.01768033     1.50878921     0.29782419
-    ## 3      -1.3128529     0.08710345    -0.31128807    -0.74920102    -0.34943942
-    ## 4       1.2232879    -0.81050285     0.17941727    -0.06273997    -0.41756646
-    ## 5      -0.1797314    -1.03412790     0.25001613    -0.43837575     0.55327006
-    ## 6      -0.8863547    -0.14767523    -1.13776194     1.87547235     0.12379534
-    ## 7      -0.8724806     0.50671794    -0.41941722     1.06498970     0.28239274
-    ## 8       0.7865213     0.18039751    -1.10264395     2.42614014    -0.76975452
-    ## 9       0.9615018     1.06718996    -0.82164717    -0.17879297     0.57100000
-    ## 10      0.8244921    -2.27437893     1.58937633    -0.65761457    -1.87574338
+    ## 1     -0.70055912   -0.103371435      0.2627477     1.48282582     0.43020131
+    ## 2     -0.07144706   -0.376918782      0.4897831    -2.00564481    -1.65061942
+    ## 3     -1.87383595   -2.593887646     -0.2942647    -1.28466525    -0.20613762
+    ## 4     -0.10602527   -0.067987756     -0.6131307    -0.17578847     0.68173317
+    ## 5      1.73944563   -1.309166520      1.3197837    -0.07829844     0.62775256
+    ## 6      1.26441378    1.503947531     -1.4055403     0.28114224     0.33448626
+    ## 7      0.86329607   -0.340630226      0.2218441    -0.53241064     1.28376561
+    ## 8      0.68377656    0.520798702     -2.1381791     1.63366930     0.83304242
+    ## 9     -1.69347823    0.304035491      1.1021748    -0.26821552    -0.08340251
+    ## 10    -0.77276851    0.008407693     -0.7661905    -1.62528216    -0.01063623
 
 ## Looping
 
@@ -1278,16 +1327,16 @@ summary(reg)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.76698 -0.84456 -0.09529  0.78575  2.38787 
+    ## -2.12865 -0.56419 -0.06904  0.61054  2.74937 
     ## 
     ## Coefficients:
     ##              Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)    0.1038     0.1987   0.522    0.605
-    ## measurement2  -0.0951     0.1888  -0.504    0.618
+    ## (Intercept)  -0.09368    0.19865  -0.472    0.641
+    ## measurement2  0.05151    0.18065   0.285    0.778
     ## 
-    ## Residual standard error: 1.062 on 28 degrees of freedom
-    ## Multiple R-squared:  0.008981,   Adjusted R-squared:  -0.02641 
-    ## F-statistic: 0.2537 on 1 and 28 DF,  p-value: 0.6184
+    ## Residual standard error: 1.08 on 28 degrees of freedom
+    ## Multiple R-squared:  0.002896,   Adjusted R-squared:  -0.03272 
+    ## F-statistic: 0.08132 on 1 and 28 DF,  p-value: 0.7776
 
 ``` r
 # now run 5000 bootstrap
@@ -1305,5 +1354,5 @@ funcoef
     ## 
     ## Intervals : 
     ## Level       BCa          
-    ## 95%   (-0.4243,  0.3827 )  
+    ## 95%   (-0.3,  0.4 )  
     ## Calculations and Intervals on Original Scale

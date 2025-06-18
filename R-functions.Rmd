@@ -16,12 +16,33 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # R functions
 
-This is a collection of functions typically used in R, especially in psychology.  
+This is a collection of functions typically used in R, especially in psychology.
 
-For any question, feel free to drop me an email : pupillo@psych.uni-frankfurt.de
+For any question, feel free to drop me an email : [pupillo\@psych.uni-frankfurt.de](mailto:pupillo@psych.uni-frankfurt.de){.email}
+
+### Check if required packages are installed, install them if not
+
+```{r install packages only if not installed, echo = TRUE}
+# Define the list of required packages
+required_packages <- c("dplyr", "ggplot2", "tidyr", "readr")
+
+# Check which packages are not installed
+# call all the isntalled packages with the "installed.packages()" function
+missing_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
+
+# Install missing packages
+if (length(missing_packages)) {
+  install.packages(missing_packages)
+}
+
+# Optionally load all packages
+lapply(required_packages, library, character.only = TRUE)
+
+```
 
 ### Exclude rows based on a set of criteria (or participants)
-Useful code to exclude rows in a dataset that corresponds to participants we decided to exclude. 
+
+Useful code to exclude rows in a dataset that corresponds to participants we decided to exclude.
 
 ```{r exclusionSeveralCriteria, echo=TRUE}
 
@@ -44,8 +65,11 @@ df<- df %>%
   filter(!participants %in% partExcl)
 
 ```
+
 ### Count the arguments of a function
+
 Function that returns the number of arguments in a function
+
 ```{r count the arguments of a function, echo=TRUE}
 # let's create a function that calculate the means between three dimenions (x, y ,z)
 
@@ -67,7 +91,9 @@ numfooArgs
 ```
 
 ### Call a function by a character string
+
 How to assign a name of a function to a character string and then call it later? By using "get".
+
 ```{r call a function by a character string, echo=TRUE}
 # Create a function. This one calculate the average of three dimensions
 
@@ -91,12 +117,11 @@ myfunction(3,4,5)
 numfooArgs
 ```
 
-
-
-
 ### Go through a list of items and select the ones that meet some criteria (contains rm in a loop)
+
 This example is based on the BOSS dataset
-``` {r select items}
+
+```{r select items}
 # we need the readxl package to read the excel file with the object info
 library(readxl)
 # and dplyr for intabulating
@@ -154,7 +179,9 @@ for (i in 1:length(tomerge)){
 }
 
 ```
+
 ### select items in a dataset that start or end with a string
+
 ```{R, eval = F}
 # select variables that start with lh or rh
 datasub<-data[, c( grep( "^lh_", names(data), value = TRUE), 
@@ -166,6 +193,7 @@ datasub<-data[, c(grep("_thickness$", names(data), value = TRUE))]
 ```
 
 ### substring before/after a specific character
+
 ```{R, eval = F}
 # substring the ID depending on what comes before "_" or before ".EDF" 
 sub("\\_.*|\\.EDF", "", files)
@@ -175,8 +203,8 @@ sub("sub-\\.*","", sub)
 
 ```
 
-
 ### Select elements in a vector that start or end with a letter
+
 ```{r}
 
 # create a vector
@@ -192,7 +220,9 @@ Evect<-vect[grep("e$", vect)]
 
 Evect
 ```
+
 ### Reshape a dataset
+
 ```{R}
 # Load the reshape2 package
 library(reshape2)
@@ -218,12 +248,10 @@ print(wide_data)
 
 ```
 
-
-
-
 ## Looping
-Functions that are used for looping through data
-#### create a progress bar
+
+Functions that are used for looping through data \#### create a progress bar
+
 ```{r progress bar}
 
 # using the previous example of the boss dataset
@@ -248,6 +276,7 @@ for (cat in 1:length(selCat)){
 ```
 
 #### Append dataframes in a loop
+
 ```{r eval=FALSE, include=T}
 # first, create a list
 my_list<-list()
@@ -269,9 +298,10 @@ all_df<-do.call(rbind, my_list)
 
 ```
 
-
 #### Error Handling
+
 Don't stop the loop when there is an error, but catch the error
+
 ```{r error handling, eval=F}
 # create a variable with random numbers, but with a NA
 randVar<-c(1,2,3,4,NA, 6,7)
@@ -326,12 +356,15 @@ length(missing_cases)
 ```
 
 ### Dplyr
+
 #### Count number of observations by group
+
 ```{r}
 category %>%
   group_by(modal_categ) %>%
   tally()
 ```
+
 #### Count number of missing cases by group
 
 ```{r}
@@ -340,8 +373,8 @@ category %>%
   dplyr::summarise(CountCase = n(), PercNA = sum(is.na(modal_categ))/n()*100)
 ```
 
-
 #### Calculate means with grouping factor with dplyr
+
 ```{r}
 library(dplyr)
 meanGroup<- category %>%
@@ -356,6 +389,7 @@ meanGroup
 ```
 
 #### Add trial number in a long dataset with dplyr
+
 ```{r}
 
 # create data frame 
@@ -372,6 +406,7 @@ trial_df <- trial_df %>%
 ### ggplot
 
 #### Plot a summary line across the trials
+
 ```{r warning=FALSE}
 # load the ggplot library
 library(ggplot2)
@@ -449,7 +484,8 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
 
 ```
 
-#### Set default options for multiple plots 
+#### Set default options for multiple plots
+
 ```{r warning=FALSE}
 # We need to set a function
 custom_param<-function(){
@@ -481,8 +517,8 @@ ggplot(dat_summary_fix_pr,aes(x = trial_n, y = fixation_prediction,
 
 ```
 
-
 #### Plot within-particiants error bars plus individual lines by condition
+
 ```{r warning=FALSE}
 # first, summarise with within-participant error bars
 dat_summary_fix_error<- summarySEwithin(all_data_et,
@@ -520,8 +556,8 @@ ggplot(all_data_et %>%
 
 ```
 
-
 #### Rain-clouds plots
+
 ```{R}
 # First, we have to install the packages
 source("RainCloudPlots-master/tutorial_R/R_rainclouds.R")
@@ -560,6 +596,7 @@ rain_clouds
 ```
 
 ### Add a line that connects the means in rain-clouds plots
+
 ```{R}
 
 rain_clouds_line<-rain_clouds+
@@ -571,6 +608,7 @@ rain_clouds_line
 ```
 
 #### Spaghetti plot
+
 ```{r}
 # Create a spaghetti plot of some subset trials
   ggplot(all_data_et[all_data_et$trial_n<21,], 
@@ -593,8 +631,8 @@ rain_clouds_line
 
 ```
 
-
 #### Spaghetti plot with quadratic
+
 ```{r}
 all_data_et$PE<-as.numeric(all_data_et$PE)
 ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
@@ -609,7 +647,8 @@ ggplot(all_data_et, aes( x=PE, y=conf_resp.keys))+
   theme(legend.position = "none")
 ```
 
-#### Density plots 
+#### Density plots
+
 ```{r}
 # Density plots
 Plot_loc<-ggplot(all_data_et, aes(x= location_error, fill=type))
@@ -636,6 +675,7 @@ density_plot
 ```
 
 ### Combine two plots in one (note that the size of the components need to be adjusted prior to arranging)
+
 ```{R}
 library(ggpubr)
 ggarrange(rain_clouds, density_plot, 
@@ -647,7 +687,8 @@ ggarrange(rain_clouds, density_plot,
 ### System Administration Tasks
 
 #### Creating, deleting, copying files and directories
-``` {r create delete copy folders, eval=F}
+
+```{r create delete copy folders, eval=F}
 # create a directory
 dir.create("new_folder")
 
@@ -692,7 +733,9 @@ file.exists("new_folder")
 ```
 
 #### Get the script's directory path
-Get the path to directory that contains the script and set it as the working directory 
+
+Get the path to directory that contains the script and set it as the working directory
+
 ```{r script directory, echo=TRUE}
 
 # get the script directory
@@ -712,7 +755,9 @@ setwd(path)
 ```
 
 #### Select files according to characters that come before a symbol
+
 Return the characters before a specific symbol
+
 ```{r symbol, echo=TRUE}
 
 # take the first file from the previous example
@@ -728,7 +773,9 @@ sel
 ```
 
 #### Select files that meet a criterion
+
 Selecting files that meets a criterion, or file estension
+
 ```{r select files, echo=TRUE}
 # create a vector with names that vary in different ways
 files<-vector()
@@ -770,13 +817,12 @@ selCsv<-list.files(pattern= c("myfile.*.csv$"))
 selCsv
 
 ```
+
 ### Stats
+
 #### Sumamry SE within with non-normative means
-SummarySEwithin from the "Rmisc" package is a very handy function to compute
-within-participant errors (ci, sd, and se). H
-However, the mean returned by this function is normative. If you use summary
-SE within together with ggplot, you might want to use the following version, 
-which return the non-normative means.
+
+SummarySEwithin from the "Rmisc" package is a very handy function to compute within-participant errors (ci, sd, and se). H However, the mean returned by this function is normative. If you use summary SE within together with ggplot, you might want to use the following version, which return the non-normative means.
 
 Taken from:
 
@@ -881,7 +927,9 @@ summarySEwithin2 <- function (data = NULL, measurevar, betweenvars = NULL, withi
 ```
 
 #### bootstrapping regression
-Bootstrap is a method for running robust regression on data for which we do not know the sampling distribution. Bootstrapping regression allows to get around this problem by estimating the properties of the sampling distribution from the data. The sample data are treated as a population from which smaller samples (called bootstrap samples) are taken (with replacement). The parameter of interest (e.g., the slope in a regression) is then calculated in each bootstrap sample. This process is repeated n times, one for each bootstrap sample. We can then order the obtained parameters and and calculate trhe limits whithin which 95% of the samples fall. These values are the 95% confidence intervals of the parameters. 
+
+Bootstrap is a method for running robust regression on data for which we do not know the sampling distribution. Bootstrapping regression allows to get around this problem by estimating the properties of the sampling distribution from the data. The sample data are treated as a population from which smaller samples (called bootstrap samples) are taken (with replacement). The parameter of interest (e.g., the slope in a regression) is then calculated in each bootstrap sample. This process is repeated n times, one for each bootstrap sample. We can then order the obtained parameters and and calculate trhe limits whithin which 95% of the samples fall. These values are the 95% confidence intervals of the parameters.
+
 ```{r}
 # load the package that runs the bootstrap
 library(boot)
@@ -909,5 +957,3 @@ bootresults <- boot(data = long_data,formula = formula, statistic = bootfunc, R 
 funcoef
 
 ```
-
-
